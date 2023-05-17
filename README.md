@@ -6,6 +6,8 @@ A template to build REST APIs.
 
 This is where i'm going to place my ideas and things that i want to do or use in this project:
 
+- [ ] Editor config
+- [ ] Path aliases
 - [ ] Clean architecture
 - [ ] Value Objects where needed
 - [ ] Good and scalable error handling
