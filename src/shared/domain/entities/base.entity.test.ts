@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { BaseEntity } from './base.entity';
 
 describe('BaseEntity', () => {
@@ -27,5 +28,17 @@ describe('BaseEntity', () => {
     const entity = new BaseEntity<{}>({});
 
     expect(entity.updatedAt.getTime()).toEqual(new Date().getTime());
+  });
+
+  it('should be able to receive id, created date and updated date', () => {
+    const id = randomUUID();
+    const createdAt = new Date();
+    const updatedAt = new Date();
+
+    const entity = new BaseEntity<{}>({}, { id, createdAt, updatedAt });
+
+    expect(entity.id).toEqual(id);
+    expect(entity.createdAt).toEqual(createdAt);
+    expect(entity.updatedAt).toEqual(updatedAt);
   });
 });

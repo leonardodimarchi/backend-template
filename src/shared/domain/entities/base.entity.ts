@@ -2,8 +2,8 @@ import { UUID, randomUUID } from 'crypto';
 
 export interface BaseEntityProps {
   id: UUID;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export class BaseEntity<TProps extends object> {
