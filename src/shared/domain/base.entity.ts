@@ -18,9 +18,9 @@ export class BaseEntity<TProps extends object> {
   protected _createdAt: Date;
   protected _updatedAt: Date;
   protected props: TProps;
-  
+
   get id(): UUID {
-    return this._id; 
+    return this._id;
   }
 
   get createdAt(): Date {

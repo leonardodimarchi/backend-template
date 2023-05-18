@@ -1,7 +1,4 @@
-import {
-  BaseEntity,
-  BaseEntityProps,
-} from '@shared/domain/entities/base.entity';
+import { BaseEntity, BaseEntityProps } from '@shared/domain/base.entity';
 
 export interface UserEntityProps {
   name: string;
