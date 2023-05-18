@@ -7,8 +7,12 @@ export interface UserEntityProps {
 }
 
 export class UserEntity extends BaseEntity<UserEntityProps> {
-  private constructor(props: UserEntityProps, baseEntityProps?: BaseEntityProps) {
+  private constructor(
+    props: UserEntityProps,
+    baseEntityProps?: BaseEntityProps
+  ) {
     super(props, baseEntityProps);
+    Object.freeze(this);
   }
 
   static create(props: UserEntityProps, baseEntityProps?: BaseEntityProps) {
