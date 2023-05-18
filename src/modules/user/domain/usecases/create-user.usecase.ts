@@ -1,5 +1,5 @@
 import { UseCase } from '@shared/domain/usecase';
-import { UserEntity } from '../entities/user.entity';
+import { UserEntity } from '../entities/user/user.entity';
 import { UserRepository } from '../repositories/user.repository';
 
 export interface CreateUserUseCaseInput {

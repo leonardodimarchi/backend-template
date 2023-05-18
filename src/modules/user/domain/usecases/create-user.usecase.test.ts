@@ -1,5 +1,5 @@
 import { InMemoryUserRepository } from 'test/repositories/in-memory-user-repository';
-import { UserEntity } from '../entities/user.entity';
+import { UserEntity } from '../entities/user/user.entity';
 import { UserRepository } from '../repositories/user.repository';
 import { CreateUserUseCase } from './create-user.usecase';
 import { InMemoryRepository } from 'test/repositories/in-memory-repository';
