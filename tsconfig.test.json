@@ -1,0 +1,7 @@
+{
+    "extends": "./tsconfig.json",
+    "paths": {
+      "@modules/*": ["../../../src/modules/*"],
+      "@shared/*": ["../../../src/shared/*"]
+    },
+  }
