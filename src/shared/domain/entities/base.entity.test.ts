@@ -41,4 +41,16 @@ describe('BaseEntity', () => {
     expect(entity.createdAt).toEqual(createdAt);
     expect(entity.updatedAt).toEqual(updatedAt);
   });
+
+  it('should be able to have props', () => {
+    class MyEntity extends BaseEntity<{ myProperty: string }> {
+      get myProperty(): string {
+        return this.props.myProperty;
+      }
+    };
+
+    const entity = new MyEntity({ myProperty: 'myValue' });
+
+    expect(entity.myProperty).toBe('myValue');
+  });
 });
