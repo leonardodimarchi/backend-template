@@ -1,5 +1,6 @@
 import { UseCase } from '@shared/domain/usecase';
 import { UserEntity } from '../entities/user.entity';
+import { UserRepository } from '../repositories/user.repository';
 
 export interface CreateUserUseCaseInput {
   name: string;
@@ -14,6 +15,8 @@ export interface CreateUserUseCaseOutput {
 export class CreateUserUseCase
   implements UseCase<CreateUserUseCaseInput, CreateUserUseCaseOutput>
 {
+  constructor(private readonly repository: UserRepository) {}
+
   async exec({
     name,
     email,
@@ -24,6 +27,8 @@ export class CreateUserUseCase
       email,
       password,
     });
+
+    await this.repository.save(user);
 
     return { createdUser: user };
   }
