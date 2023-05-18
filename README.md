@@ -10,5 +10,6 @@ This is where i'm going to place my ideas and things that i want to do or use in
 - [x] Path aliases
 - [ ] Clean architecture
 - [ ] Value Objects where needed
+    - [ ] Factories at the entities (interface to receive non VO values)
 - [ ] Good and scalable error handling
 - [ ] i18n (fully handled by the presentation layer)
