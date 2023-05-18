@@ -47,7 +47,7 @@ describe('BaseEntity', () => {
       get myProperty(): string {
         return this.props.myProperty;
       }
-    };
+    }
 
     const entity = new MyEntity({ myProperty: 'myValue' });
 
