@@ -1,3 +1,3 @@
-export abstract class Usecase<TInput, TOutput> {
+export abstract class UseCase<TInput, TOutput> {
   abstract exec(input: TInput): TOutput | Promise<TOutput>;
 }
