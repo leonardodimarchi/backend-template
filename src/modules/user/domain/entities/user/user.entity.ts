@@ -15,7 +15,7 @@ export class UserEntity extends BaseEntity<UserEntityProps> {
     Object.freeze(this);
   }
 
-  static create(props: UserEntityProps, baseEntityProps?: BaseEntityProps) {
+  static create(props: UserEntityProps, baseEntityProps?: BaseEntityProps): UserEntity {
     return new UserEntity(props, baseEntityProps);
   }
 
