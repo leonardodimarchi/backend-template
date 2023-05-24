@@ -3,6 +3,7 @@ import {
   UserEntity,
   UserEntityCreateProps,
 } from '@modules/user/domain/entities/user/user.entity';
+import { CreateUserPayload } from '@modules/user/presenter/models/payloads/create-user.payload';
 import { UserViewModel } from '@modules/user/presenter/models/view-models/user.view-model';
 import { BaseEntityProps } from '@shared/domain/base.entity';
 import { UUID } from 'crypto';
@@ -41,4 +42,12 @@ export class MockUser {
 
     return new UserViewModel(entity);
   }
+
+  static createPayload(): CreateUserPayload {
+    return {
+      email: faker.internet.email(),
+      name: faker.person.fullName(),
+      password: faker.internet.password(),
+    }
+  } 
 }
