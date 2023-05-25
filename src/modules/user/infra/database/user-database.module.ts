@@ -6,7 +6,9 @@ import { UserRepository } from '@modules/user/domain/repositories/user.repositor
 
 @Module({
   imports: [TypeOrmModule.forFeature([UserSchema])],
-  providers: [TypeOrmUserRepository],
+  providers: [
+    { provide: UserRepository, useClass: TypeOrmUserRepository }
+  ],
   exports: [UserRepository],
 })
 export class UserDatabaseModule {}
