@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TypeOrmConfigService } from './typeorm/typeorm-config.service';
+import { dataSourceOptions } from './typeorm/datasource-options';
 
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
-      useClass: TypeOrmConfigService,
+      useFactory: () => {
+        return dataSourceOptions;
+      }
     }),
   ],
 })
