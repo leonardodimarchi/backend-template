@@ -10,4 +10,8 @@ export class InMemoryUserRepository
   async save(user: UserEntity): Promise<void> {
     this.items.push(user);
   }
+
+  async isDuplicatedEmail(email: string): Promise<boolean> {
+    return !!this.items.find((u) => u.email === email);
+  }
 }

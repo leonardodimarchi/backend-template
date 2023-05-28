@@ -14,4 +14,10 @@ export class TypeOrmUserRepository implements UserRepository {
   async save(user: UserEntity): Promise<void> {
     await this.typeOrmRepository.save(TypeOrmUserMapper.toSchema(user));
   }
+
+  async isDuplicatedEmail(email: string): Promise<boolean> {
+    const user = await this.typeOrmRepository.findOneBy({ email });
+
+    return !!user;
+  }
 }

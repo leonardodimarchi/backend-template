@@ -3,6 +3,9 @@ import { UserEntity } from '../entities/user/user.entity';
 import { UserRepository } from '../repositories/user.repository';
 import { CreateUserUseCase } from './create-user.usecase';
 import { InMemoryRepository } from 'test/repositories/in-memory-repository';
+import { MockUser } from 'test/factories/mock-user';
+import { faker } from '@faker-js/faker';
+import { DuplicatedEmailError } from '../errors/duplicated-email.error';
 
 describe('CreateUserUseCase', () => {
   let usecase: CreateUserUseCase;
@@ -34,5 +37,16 @@ describe('CreateUserUseCase', () => {
     });
 
     expect(repository.items).toHaveLength(1);
+  });
+
+  it('should not be able to create if has a duplicated e-mail', async () => {
+    const entity = MockUser.createEntity({
+      override: { email: faker.internet.email() },
+    });
+    repository.save(entity);
+
+    const call = async () => await usecase.exec(entity);
+
+    expect(call).rejects.toThrow(DuplicatedEmailError);
   });
 });
