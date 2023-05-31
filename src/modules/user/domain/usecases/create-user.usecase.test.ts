@@ -6,17 +6,24 @@ import { InMemoryRepository } from 'test/repositories/in-memory-repository';
 import { MockUser } from 'test/factories/mock-user';
 import { faker } from '@faker-js/faker';
 import { DuplicatedEmailError } from '../errors/duplicated-email.error';
+import { PasswordEncryptionService } from '../services/password-encryption.service';
+import { DeepMocked, createMock } from 'test/utils/create-mock';
 
 describe('CreateUserUseCase', () => {
   let usecase: CreateUserUseCase;
   let repository: InMemoryRepository<UserRepository, UserEntity>;
+  let passwordEncryptionService: DeepMocked<PasswordEncryptionService>;
 
   beforeEach(() => {
     repository = new InMemoryUserRepository();
-    usecase = new CreateUserUseCase(repository);
+    passwordEncryptionService = createMock<PasswordEncryptionService>();
+    usecase = new CreateUserUseCase(repository, passwordEncryptionService);
   });
 
   it('should return a new user', async () => {
+    const encryptedPassword = 'example.encrypted.password';
+    passwordEncryptionService.hash.mockResolvedValueOnce(encryptedPassword);
+
     const { createdUser } = await usecase.exec({
       name: 'John Doe',
       email: 'john.doe@email.com',
@@ -26,7 +33,7 @@ describe('CreateUserUseCase', () => {
     expect(createdUser).toBeInstanceOf(UserEntity);
     expect(createdUser.name).toBe('John Doe');
     expect(createdUser.email).toBe('john.doe@email.com');
-    expect(createdUser.password).toBe('johnpassword');
+    expect(createdUser.password).toBe(encryptedPassword);
   });
 
   it('should persist the new user', async () => {
@@ -48,5 +55,18 @@ describe('CreateUserUseCase', () => {
     const call = async () => await usecase.exec(entity);
 
     expect(call).rejects.toThrow(DuplicatedEmailError);
+  });
+
+  it('should persist with encrypted password', async () => {
+    const encryptedPassword = 'example.encrypted.password';
+    passwordEncryptionService.hash.mockResolvedValueOnce(encryptedPassword);
+
+    await usecase.exec({
+      email: faker.internet.email(),
+      name: faker.person.fullName(),
+      password: faker.internet.password(),
+    });
+
+    expect(repository.items[0].password).toEqual(encryptedPassword);
   });
 });

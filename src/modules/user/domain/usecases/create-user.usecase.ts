@@ -2,6 +2,7 @@ import { UseCase } from '@shared/domain/usecase';
 import { UserEntity } from '../entities/user/user.entity';
 import { UserRepository } from '../repositories/user.repository';
 import { DuplicatedEmailError } from '../errors/duplicated-email.error';
+import { PasswordEncryptionService } from '../services/password-encryption.service';
 
 export interface CreateUserUseCaseInput {
   name: string;
@@ -16,7 +17,10 @@ export interface CreateUserUseCaseOutput {
 export class CreateUserUseCase
   implements UseCase<CreateUserUseCaseInput, CreateUserUseCaseOutput>
 {
-  constructor(private readonly repository: UserRepository) {}
+  constructor(
+    private readonly repository: UserRepository,
+    private readonly passwordEncryptionService: PasswordEncryptionService
+  ) {}
 
   async exec({
     name,
@@ -34,6 +38,10 @@ export class CreateUserUseCase
     if (hasDuplicatedEmail) {
       throw new DuplicatedEmailError(email);
     }
+
+    const encryptedPassword = await this.passwordEncryptionService.hash(user.password);
+
+    user.password = encryptedPassword;
 
     await this.repository.save(user);
 

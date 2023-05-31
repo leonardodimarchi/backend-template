@@ -48,4 +48,8 @@ export class UserEntity extends BaseEntity<UserEntityProps> {
   get password(): string {
     return this.props.password;
   }
+
+  set password(password: string) {
+    this.props.password = password;
+  }
 }
