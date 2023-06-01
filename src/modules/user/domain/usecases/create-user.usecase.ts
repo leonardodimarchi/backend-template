@@ -3,6 +3,8 @@ import { UserEntity } from '../entities/user/user.entity';
 import { UserRepository } from '../repositories/user.repository';
 import { DuplicatedEmailError } from '../errors/duplicated-email.error';
 import { PasswordEncryptionService } from '../services/password-encryption.service';
+import { InvalidEmailError } from '../errors/invalid-email.error';
+import { Either, Left, Right } from '@shared/helpers/either';
 
 export interface CreateUserUseCaseInput {
   name: string;
@@ -14,8 +16,15 @@ export interface CreateUserUseCaseOutput {
   createdUser: UserEntity;
 }
 
+export type CreateUserUseCaseErrors = InvalidEmailError | DuplicatedEmailError;
+
 export class CreateUserUseCase
-  implements UseCase<CreateUserUseCaseInput, CreateUserUseCaseOutput>
+  implements
+    UseCase<
+      CreateUserUseCaseInput,
+      CreateUserUseCaseOutput,
+      CreateUserUseCaseErrors
+    >
 {
   constructor(
     private readonly repository: UserRepository,
@@ -26,25 +35,33 @@ export class CreateUserUseCase
     name,
     email,
     password,
-  }: CreateUserUseCaseInput): Promise<CreateUserUseCaseOutput> {
+  }: CreateUserUseCaseInput): Promise<
+    Either<CreateUserUseCaseErrors, CreateUserUseCaseOutput>
+  > {
     const user = UserEntity.create({
       name,
       email,
       password,
     });
 
+    if (user.isLeft()) {
+      return new Left(user.value);
+    }
+
     const hasDuplicatedEmail = await this.repository.isDuplicatedEmail(email);
 
     if (hasDuplicatedEmail) {
-      throw new DuplicatedEmailError(email);
+      return new Left(new DuplicatedEmailError(email));
     }
 
-    const encryptedPassword = await this.passwordEncryptionService.hash(user.password);
+    const encryptedPassword = await this.passwordEncryptionService.hash(
+      user.value.password
+    );
 
-    user.password = encryptedPassword;
+    user.value.password = encryptedPassword;
 
-    await this.repository.save(user);
+    await this.repository.save(user.value);
 
-    return { createdUser: user };
+    return new Right({ createdUser: user.value });
   }
 }

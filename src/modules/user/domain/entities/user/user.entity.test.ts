@@ -1,3 +1,4 @@
+import { Right } from '@shared/helpers/either';
 import { UserEntity } from './user.entity';
 
 describe('UserEntity', () => {
@@ -12,8 +13,10 @@ describe('UserEntity', () => {
       password,
     });
 
-    expect(entity.name).toBe(name);
-    expect(entity.email).toBe(email);
-    expect(entity.password).toBe(password);
+    expect(entity).toBeInstanceOf(Right);
+
+    expect((entity.value as UserEntity).name).toBe(name);
+    expect((entity.value as UserEntity).email).toBe(email);
+    expect((entity.value as UserEntity).password).toBe(password);
   });
 });

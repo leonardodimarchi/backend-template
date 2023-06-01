@@ -1,4 +1,5 @@
 import { InvalidEmailError } from '@modules/user/domain/errors/invalid-email.error';
+import { Either, Left, Right } from '@shared/helpers/either';
 
 export class Email {
   private constructor(email: string) {
@@ -6,12 +7,12 @@ export class Email {
     Object.freeze(this)
   }
 
-  static create(email: string): Email {
+  static create(email: string): Either<InvalidEmailError, Email> {
     if (!Email.validate(email)) {
-      throw new InvalidEmailError(email);
+      return new Left(new InvalidEmailError(email));
     }
 
-    return new Email(email);
+    return new Right(new Email(email));
   }
 
   private readonly email: string;

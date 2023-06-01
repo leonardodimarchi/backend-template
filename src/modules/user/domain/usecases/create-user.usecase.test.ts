@@ -1,13 +1,17 @@
 import { InMemoryUserRepository } from 'test/repositories/in-memory-user-repository';
 import { UserEntity } from '../entities/user/user.entity';
 import { UserRepository } from '../repositories/user.repository';
-import { CreateUserUseCase } from './create-user.usecase';
+import {
+  CreateUserUseCase,
+  CreateUserUseCaseOutput,
+} from './create-user.usecase';
 import { InMemoryRepository } from 'test/repositories/in-memory-repository';
 import { MockUser } from 'test/factories/mock-user';
 import { faker } from '@faker-js/faker';
 import { DuplicatedEmailError } from '../errors/duplicated-email.error';
 import { PasswordEncryptionService } from '../services/password-encryption.service';
 import { DeepMocked, createMock } from 'test/utils/create-mock';
+import { Left, Right } from '@shared/helpers/either';
 
 describe('CreateUserUseCase', () => {
   let usecase: CreateUserUseCase;
@@ -24,16 +28,22 @@ describe('CreateUserUseCase', () => {
     const encryptedPassword = 'example.encrypted.password';
     passwordEncryptionService.hash.mockResolvedValueOnce(encryptedPassword);
 
-    const { createdUser } = await usecase.exec({
+    const result = await usecase.exec({
       name: 'John Doe',
       email: 'john.doe@email.com',
       password: 'johnpassword',
     });
 
-    expect(createdUser).toBeInstanceOf(UserEntity);
-    expect(createdUser.name).toBe('John Doe');
-    expect(createdUser.email).toBe('john.doe@email.com');
-    expect(createdUser.password).toBe(encryptedPassword);
+    expect(result).toBeInstanceOf(Right);
+    expect((result.value as CreateUserUseCaseOutput).createdUser.name).toBe(
+      'John Doe'
+    );
+    expect((result.value as CreateUserUseCaseOutput).createdUser.email).toBe(
+      'john.doe@email.com'
+    );
+    expect((result.value as CreateUserUseCaseOutput).createdUser.password).toBe(
+      encryptedPassword
+    );
   });
 
   it('should persist the new user', async () => {
@@ -52,9 +62,10 @@ describe('CreateUserUseCase', () => {
     });
     repository.save(entity);
 
-    const call = async () => await usecase.exec(entity);
+    const result = await usecase.exec(entity);
 
-    expect(call).rejects.toThrow(DuplicatedEmailError);
+    expect(result).toBeInstanceOf(Left);
+    expect(result.value).toBeInstanceOf(DuplicatedEmailError);
   });
 
   it('should persist with encrypted password', async () => {

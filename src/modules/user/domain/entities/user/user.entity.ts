@@ -1,6 +1,8 @@
 import { BaseEntity, BaseEntityProps } from '@shared/domain/base.entity';
 import { Replace } from '@shared/helpers/replace';
 import { Email } from './value-objects/email';
+import { Either, Left, Right } from '@shared/helpers/either';
+import { InvalidEmailError } from '../../errors/invalid-email.error';
 
 export interface UserEntityProps {
   name: string;
@@ -8,9 +10,12 @@ export interface UserEntityProps {
   password: string;
 }
 
-export type UserEntityCreateProps = Replace<UserEntityProps, {
-  email: string;
-}>
+export type UserEntityCreateProps = Replace<
+  UserEntityProps,
+  {
+    email: string;
+  }
+>;
 
 export class UserEntity extends BaseEntity<UserEntityProps> {
   private constructor(
@@ -21,12 +26,26 @@ export class UserEntity extends BaseEntity<UserEntityProps> {
     Object.freeze(this);
   }
 
-  static create({ name, email, password }: UserEntityCreateProps, baseEntityProps?: BaseEntityProps): UserEntity {
-    return new UserEntity({
-      name,
-      email: Email.create(email),
-      password
-    }, baseEntityProps);
+  static create(
+    { name, email, password }: UserEntityCreateProps,
+    baseEntityProps?: BaseEntityProps
+  ): Either<InvalidEmailError, UserEntity> {
+    const emailValue = Email.create(email);
+
+    if (emailValue.isLeft()) {
+      return new Left(emailValue.value);
+    }
+
+    return new Right(
+      new UserEntity(
+        {
+          name,
+          email: emailValue.value,
+          password,
+        },
+        baseEntityProps
+      )
+    );
   }
 
   set name(name: string) {
@@ -37,8 +56,8 @@ export class UserEntity extends BaseEntity<UserEntityProps> {
     return this.props.name;
   }
 
-  set email(email: string) {
-    this.props.email = Email.create(email);
+  set email(email: Email) {
+    this.props.email = email;
   }
 
   get email(): string {

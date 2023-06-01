@@ -3,6 +3,7 @@ import {
   UserEntity,
   UserEntityCreateProps,
 } from '@modules/user/domain/entities/user/user.entity';
+import { Email } from '@modules/user/domain/entities/user/value-objects/email';
 import { CreateUserPayload } from '@modules/user/presenter/models/payloads/create-user.payload';
 import { UserViewModel } from '@modules/user/presenter/models/view-models/user.view-model';
 import { BaseEntityProps } from '@shared/domain/base.entity';
@@ -21,9 +22,15 @@ export class MockUser {
     const overrideProps = override ?? {};
     const entityPropsOverride = basePropsOverride ?? {};
 
-    return UserEntity.create(
+    const email = Email.create(faker.internet.email());
+
+    if (email.isLeft()) {
+      throw new Error(`Mock user email error: ${ email.value }`)
+    }
+
+    const user = UserEntity.create(
       {
-        email: faker.internet.email(),
+        email: email.value.value,
         name: faker.person.fullName(),
         password: faker.internet.password(),
         ...overrideProps,
@@ -35,6 +42,12 @@ export class MockUser {
         ...entityPropsOverride,
       }
     );
+
+    if (user.isLeft()) {
+      throw new Error(`Mock user error: ${ user.value }`)
+    }
+
+    return user.value;
   }
 
   static createViewModel(override: CreateMockUserOverrideProps = {}): UserViewModel {
