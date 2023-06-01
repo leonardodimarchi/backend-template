@@ -8,8 +8,9 @@ import { MockUser } from 'test/factories/mock-user';
 import { UserViewModel } from '../models/view-models/user.view-model';
 import { DuplicatedEmailError } from '@modules/user/domain/errors/duplicated-email.error';
 import { faker } from '@faker-js/faker';
-import { ConflictException } from '@nestjs/common';
+import { BadRequestException, ConflictException } from '@nestjs/common';
 import { Left, Right } from '@shared/helpers/either';
+import { InvalidEmailError } from '@modules/user/domain/errors/invalid-email.error';
 
 describe('UserController', () => {
   let controller: UserController;
@@ -53,7 +54,7 @@ describe('UserController', () => {
       });
     });
 
-    it('should throw a 409 http exception when receivingduplicated email error', async () => {
+    it('should throw a 409 http exception when receiving a duplicated email error', async () => {
       createUserUseCase.exec.mockResolvedValueOnce(
         new Left(new DuplicatedEmailError(faker.internet.email()))
       );
@@ -62,6 +63,17 @@ describe('UserController', () => {
         await controller.create(MockUser.createPayload());
 
       expect(call).rejects.toThrow(ConflictException);
+    });
+
+    it('should throw a 403 http exception when receiving an invalid email error', async () => {
+      createUserUseCase.exec.mockResolvedValueOnce(
+        new Left(new InvalidEmailError(faker.internet.email()))
+      );
+
+      const call = async () =>
+        await controller.create(MockUser.createPayload());
+
+      expect(call).rejects.toThrow(BadRequestException);
     });
   });
 });

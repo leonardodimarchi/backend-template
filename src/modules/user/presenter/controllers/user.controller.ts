@@ -1,5 +1,6 @@
 import { CreateUserUseCase } from '@modules/user/domain/usecases/create-user.usecase';
 import {
+  BadRequestException,
   Body,
   ConflictException,
   Controller,
@@ -11,6 +12,7 @@ import { UserViewModel } from '../models/view-models/user.view-model';
 import { CreateUserPayload } from '../models/payloads/create-user.payload';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DuplicatedEmailError } from '@modules/user/domain/errors/duplicated-email.error';
+import { InvalidEmailError } from '@modules/user/domain/errors/invalid-email.error';
 
 @ApiTags('Users')
 @Controller('users')
@@ -29,16 +31,22 @@ export class UserController {
       password,
     });
 
-    if (result.isLeft()) {
-      if (result.value instanceof DuplicatedEmailError) {
-        throw new ConflictException('The provided e-mail already exists.', {
-          cause: result.value,
-        });
-      }
-
-      throw new InternalServerErrorException();
+    if (result.isRight()) {
+      return new UserViewModel(result.value.createdUser);
     }
 
-    return new UserViewModel(result.value.createdUser);
+    if (result.value instanceof DuplicatedEmailError) {
+      throw new ConflictException('The provided e-mail already exists.', {
+        cause: result.value,
+      });
+    }
+
+    if (result.value instanceof InvalidEmailError) {
+      throw new BadRequestException('The provided e-mail is invalid.', {
+        cause: result.value,
+      });
+    }
+
+    throw new InternalServerErrorException();
   }
 }
