@@ -13,6 +13,7 @@ import { CreateUserPayload } from '../models/payloads/create-user.payload';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DuplicatedEmailError } from '@modules/user/domain/errors/duplicated-email.error';
 import { InvalidEmailError } from '@modules/user/domain/errors/invalid-email.error';
+import { InvalidNameError } from '@modules/user/domain/errors/invalid-name.error';
 
 @ApiTags('Users')
 @Controller('users')
@@ -43,6 +44,12 @@ export class UserController {
 
     if (result.value instanceof InvalidEmailError) {
       throw new BadRequestException('The provided e-mail is invalid.', {
+        cause: result.value,
+      });
+    }
+
+    if (result.value instanceof InvalidNameError) {
+      throw new BadRequestException('The provided name is invalid.', {
         cause: result.value,
       });
     }

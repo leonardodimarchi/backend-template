@@ -1,4 +1,5 @@
 import { InvalidNameError } from '@modules/user/domain/errors/invalid-name.error';
+import { Either, Left, Right } from '@shared/helpers/either';
 
 export class Name {
   private constructor(name: string) {
@@ -6,12 +7,12 @@ export class Name {
     Object.freeze(this);
   }
 
-  static create(name: string): Name {
+  static create(name: string): Either<InvalidNameError, Name> {
     if (!Name.validate(name)) {
-      throw new InvalidNameError(name);
+      return new Left(new InvalidNameError(name));
     }
 
-    return new Name(name);
+    return new Right(new Name(name));
   }
 
   private readonly name: string;

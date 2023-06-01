@@ -5,6 +5,7 @@ import { DuplicatedEmailError } from '../errors/duplicated-email.error';
 import { PasswordEncryptionService } from '../services/password-encryption.service';
 import { InvalidEmailError } from '../errors/invalid-email.error';
 import { Either, Left, Right } from '@shared/helpers/either';
+import { InvalidNameError } from '../errors/invalid-name.error';
 
 export interface CreateUserUseCaseInput {
   name: string;
@@ -16,7 +17,7 @@ export interface CreateUserUseCaseOutput {
   createdUser: UserEntity;
 }
 
-export type CreateUserUseCaseErrors = InvalidEmailError | DuplicatedEmailError;
+export type CreateUserUseCaseErrors = InvalidEmailError | InvalidNameError | DuplicatedEmailError;
 
 export class CreateUserUseCase
   implements

@@ -11,6 +11,7 @@ import { faker } from '@faker-js/faker';
 import { BadRequestException, ConflictException } from '@nestjs/common';
 import { Left, Right } from '@shared/helpers/either';
 import { InvalidEmailError } from '@modules/user/domain/errors/invalid-email.error';
+import { InvalidNameError } from '@modules/user/domain/errors/invalid-name.error';
 
 describe('UserController', () => {
   let controller: UserController;
@@ -68,6 +69,17 @@ describe('UserController', () => {
     it('should throw a 403 http exception when receiving an invalid email error', async () => {
       createUserUseCase.exec.mockResolvedValueOnce(
         new Left(new InvalidEmailError(faker.internet.email()))
+      );
+
+      const call = async () =>
+        await controller.create(MockUser.createPayload());
+
+      expect(call).rejects.toThrow(BadRequestException);
+    });
+
+    it('should throw a 403 http exception when receiving an invalid name error', async () => {
+      createUserUseCase.exec.mockResolvedValueOnce(
+        new Left(new InvalidNameError(faker.person.fullName()))
       );
 
       const call = async () =>
