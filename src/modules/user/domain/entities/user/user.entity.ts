@@ -56,16 +56,8 @@ export class UserEntity extends BaseEntity<UserEntityProps> {
     );
   }
 
-  set name(name: Name) {
-    this.props.name = name;
-  }
-
   get name(): string {
     return this.props.name.value;
-  }
-
-  set email(email: Email) {
-    this.props.email = email;
   }
 
   get email(): string {
