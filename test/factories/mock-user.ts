@@ -1,4 +1,4 @@
-import { en, faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker';
 import {
   UserEntity,
   UserEntityCreateProps,
