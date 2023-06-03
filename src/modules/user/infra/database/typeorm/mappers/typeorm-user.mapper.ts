@@ -3,7 +3,7 @@ import { UserSchema } from '../schemas/user.schema';
 
 export class TypeOrmUserMapper {
   static toEntity(schema: UserSchema): UserEntity {
-    return UserEntity.create(
+    const user = UserEntity.create(
       {
         name: schema.name,
         email: schema.email,
@@ -15,6 +15,12 @@ export class TypeOrmUserMapper {
         updatedAt: schema.updatedAt,
       }
     );
+
+    if (user.isLeft()) {
+      throw new Error(`Could not map user schema to entity: ${ user.value }`);
+    }
+
+    return user.value;
   }
 
   static toSchema(entity: UserEntity): UserSchema {
