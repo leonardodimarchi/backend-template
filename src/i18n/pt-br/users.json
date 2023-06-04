@@ -1,0 +1,7 @@
+{
+  "errors": {
+    "duplicated-email": "O e-mail enviado já existe.",
+    "invalid-email": "O e-mail enviado está inválido.",
+    "invalid-name": "O nome enviado está inválido."
+  }
+}
