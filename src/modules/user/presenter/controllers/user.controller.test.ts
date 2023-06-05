@@ -12,6 +12,7 @@ import { BadRequestException, ConflictException } from '@nestjs/common';
 import { Left, Right } from '@shared/helpers/either';
 import { InvalidEmailError } from '@modules/user/domain/errors/invalid-email.error';
 import { InvalidNameError } from '@modules/user/domain/errors/invalid-name.error';
+import { createI18nMock } from 'test/utils/create-i18n-mock';
 
 describe('UserController', () => {
   let controller: UserController;
@@ -29,7 +30,7 @@ describe('UserController', () => {
 
       createUserUseCase.exec.mockResolvedValueOnce(new Right({ createdUser }));
 
-      const result = await controller.create(MockUser.createPayload());
+      const result = await controller.create(MockUser.createPayload(), createI18nMock());
 
       expect(result).toBeInstanceOf(UserViewModel);
       expect(result).toEqual(expectedResult);
@@ -43,7 +44,7 @@ describe('UserController', () => {
         .spyOn(createUserUseCase, 'exec')
         .mockResolvedValueOnce(new Right({ createdUser }));
 
-      await controller.create(payload);
+      await controller.create(payload, createI18nMock());
 
       expect(createUserUseCase.exec).toHaveBeenCalledTimes(1);
       expect(createUserUseCase.exec).toHaveBeenCalledWith<
@@ -61,7 +62,7 @@ describe('UserController', () => {
       );
 
       const call = async () =>
-        await controller.create(MockUser.createPayload());
+        await controller.create(MockUser.createPayload(), createI18nMock());
 
       expect(call).rejects.toThrow(ConflictException);
     });
@@ -72,7 +73,7 @@ describe('UserController', () => {
       );
 
       const call = async () =>
-        await controller.create(MockUser.createPayload());
+        await controller.create(MockUser.createPayload(), createI18nMock());
 
       expect(call).rejects.toThrow(BadRequestException);
     });
@@ -83,7 +84,7 @@ describe('UserController', () => {
       );
 
       const call = async () =>
-        await controller.create(MockUser.createPayload());
+        await controller.create(MockUser.createPayload(), createI18nMock());
 
       expect(call).rejects.toThrow(BadRequestException);
     });

@@ -17,7 +17,8 @@ import * as path from 'path';
       resolvers: [
         AcceptLanguageResolver,
         QueryResolver,
-      ]
+      ],
+      typesOutputPath: path.join(__dirname, '../src/generated/i18n.generated.ts'),
     }),
   ],
   controllers: [],
