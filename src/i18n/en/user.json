@@ -1,0 +1,16 @@
+{
+  "validations": {
+    "EMAIL_IS_EMAIL": "Invalid e-mail.",
+    "NAME_IS_DEFINED": "User name must be defined.",
+    "NAME_IS_STRING": "User name must be a text.",
+    "NAME_IS_NOT_EMPTY": "User name must not be empty.",
+    "PASSWORD_IS_DEFINED": "User password must be defined.",
+    "PASSWORD_IS_STRING": "User password must be a text.",
+    "PASSWORD_IS_NOT_EMPTY": "User password must not be empty."
+  },
+  "errors": {
+    "duplicated-email": "The provided e-mail already exists.",
+    "invalid-email": "The provided e-mail is invalid.",
+    "invalid-name": "The provided name is invalid."
+  }
+}

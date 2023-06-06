@@ -7,6 +7,7 @@ import {
   HttpStatus,
   InternalServerErrorException,
   Post,
+  UseFilters,
 } from '@nestjs/common';
 import { UserViewModel } from '../models/view-models/user.view-model';
 import { CreateUserPayload } from '../models/payloads/create-user.payload';
@@ -41,7 +42,7 @@ export class UserController {
 
     if (result.value instanceof DuplicatedEmailError) {
       throw new ConflictException(
-        i18n.t('users.errors.duplicated-email'),
+        i18n.t('user.errors.duplicated-email'),
         {
           cause: result.value,
         }
@@ -49,13 +50,13 @@ export class UserController {
     }
 
     if (result.value instanceof InvalidEmailError) {
-      throw new BadRequestException(i18n.t('users.errors.invalid-email'), {
+      throw new BadRequestException(i18n.t('user.errors.invalid-email'), {
         cause: result.value,
       });
     }
 
     if (result.value instanceof InvalidNameError) {
-      throw new BadRequestException(i18n.t('users.errors.invalid-name'), {
+      throw new BadRequestException(i18n.t('user.errors.invalid-name'), {
         cause: result.value,
       });
     }

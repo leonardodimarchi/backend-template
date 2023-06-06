@@ -2,7 +2,16 @@
 
 import { Path } from "nestjs-i18n";
 export type I18nTranslations = {
-    "users": {
+    "user": {
+        "validations": {
+            "EMAIL_IS_EMAIL": string;
+            "NAME_IS_DEFINED": string;
+            "NAME_IS_STRING": string;
+            "NAME_IS_NOT_EMPTY": string;
+            "PASSWORD_IS_DEFINED": string;
+            "PASSWORD_IS_STRING": string;
+            "PASSWORD_IS_NOT_EMPTY": string;
+        };
         "errors": {
             "duplicated-email": string;
             "invalid-email": string;

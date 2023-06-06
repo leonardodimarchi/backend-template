@@ -1,7 +1,0 @@
-{
-  "errors": {
-    "duplicated-email": "The provided e-mail already exists.",
-    "invalid-email": "The provided e-mail is invalid.",
-    "invalid-name": "The provided name is invalid."
-  }
-}
