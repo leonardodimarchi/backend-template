@@ -2,11 +2,22 @@
 
 A template to build REST APIs.
 
-# TODOs
+## Code Formatting and Linter
+
+This project uses the following tools:
+
+- **ESLint**: a linter to analyze the code statically and identify potential errors or enforce coding conventions.
+
+- **Prettier**: code formatter that helps with the code formatting (after writing) in an opinionated and standardized way.
+
+- **EditorConfig:** helps the editor to follow the style guide as you write.
+
+## TODOs
 
 This is where i'm going to place my ideas and things that i want to do or use in this project:
 
 - [x] Editor config
+- [ ] Prettier precommit hook
 - [x] Path aliases
 - [x] Clean architecture
 - [x] Value Objects where needed
