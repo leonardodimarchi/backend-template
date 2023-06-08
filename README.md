@@ -17,7 +17,8 @@ This project uses the following tools:
 This is where i'm going to place my ideas and things that i want to do or use in this project:
 
 - [x] Editor config
-- [ ] Prettier precommit hook
+- [x] Prettier precommit hook
+- [ ] Shields at the README (tests and build)
 - [x] Path aliases
 - [x] Clean architecture
 - [x] Value Objects where needed
