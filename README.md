@@ -28,3 +28,4 @@ This is where i'm going to place my ideas and things that i want to do or use in
 - [x] i18n (fully handled by the presentation layer)
   - [x] Type safety
   - [x] DTO translations
+- [ ] Serverless adapter example
