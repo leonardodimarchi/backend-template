@@ -1,5 +1,9 @@
 # Backend Template
 
+![License](https://img.shields.io/github/license/leonardodimarchi/backend-template)
+![Build](https://img.shields.io/github/actions/workflow/status/leonardodimarchi/backend-template/build.yml)
+![Unit Tests](https://img.shields.io/github/actions/workflow/status/leonardodimarchi/backend-template/unit-tests.yml?label=unit-tests)
+
 A template to build REST APIs.
 
 ## Code Formatting and Linter
@@ -18,7 +22,7 @@ This is where i'm going to place my ideas and things that i want to do or use in
 
 - [x] Editor config
 - [x] Prettier precommit hook
-- [ ] Shields at the README (tests and build)
+- [x] Shields at the README (tests and build)
 - [x] Path aliases
 - [x] Clean architecture
 - [x] Value Objects where needed
