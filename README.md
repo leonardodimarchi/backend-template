@@ -33,3 +33,5 @@ This is where i'm going to place my ideas and things that i want to do or use in
   - [x] Type safety
   - [x] DTO translations
 - [ ] Serverless adapter example
+- [ ] Add user reset password module
+- [ ] Add some module to interact with user (such as course or quizzes)
