@@ -1,10 +1,13 @@
 import { BaseEntity, BaseEntityProps } from '@shared/domain/base.entity';
 import { Replace } from '@shared/helpers/replace';
-import { Either, Left, Right } from '@shared/helpers/either';
+import { Either, Right } from '@shared/helpers/either';
+import { UserEntity } from '@modules/user/domain/entities/user/user.entity';
 
 export interface CourseEntityProps {
   title: string;
   description: string;
+  price: number;
+  instructor: UserEntity;
 }
 
 export type CourseEntityCreateProps = Replace<
@@ -22,7 +25,7 @@ export class CourseEntity extends BaseEntity<CourseEntityProps> {
   }
 
   static create(
-    { title, description }: CourseEntityCreateProps,
+    { title, description, price, instructor }: CourseEntityCreateProps,
     baseEntityProps?: BaseEntityProps
   ): Either<Error, CourseEntity> {
     return new Right(
@@ -30,6 +33,8 @@ export class CourseEntity extends BaseEntity<CourseEntityProps> {
         {
           title,
           description,
+          price,
+          instructor,
         },
         baseEntityProps
       )
@@ -50,5 +55,21 @@ export class CourseEntity extends BaseEntity<CourseEntityProps> {
 
   public set description(description: string) {
     this.props.description = description;
+  }
+
+  public get price(): number {
+    return this.props.price;
+  }
+
+  public set price(price: number) {
+    this.props.price = price;
+  }
+
+  public get instructor(): UserEntity {
+    return this.props.instructor;
+  }
+
+  public set instructor(instructor: UserEntity) {
+    this.props.instructor = instructor;
   }
 }
