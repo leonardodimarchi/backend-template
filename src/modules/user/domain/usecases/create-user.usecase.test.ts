@@ -35,12 +35,12 @@ describe('CreateUserUseCase', () => {
     });
 
     expect(result).toBeInstanceOf(Right);
-    expect((result.value as CreateUserUseCaseOutput).createdUser.name).toBe(
-      'John Doe'
-    );
-    expect((result.value as CreateUserUseCaseOutput).createdUser.email).toBe(
-      'john.doe@email.com'
-    );
+    expect(
+      (result.value as CreateUserUseCaseOutput).createdUser.name.value
+    ).toBe('John Doe');
+    expect(
+      (result.value as CreateUserUseCaseOutput).createdUser.email.value
+    ).toBe('john.doe@email.com');
     expect((result.value as CreateUserUseCaseOutput).createdUser.password).toBe(
       encryptedPassword
     );
@@ -60,9 +60,13 @@ describe('CreateUserUseCase', () => {
     const entity = MockUser.createEntity({
       override: { email: faker.internet.email() },
     });
-    repository.save(entity);
+    await repository.save(entity);
 
-    const result = await usecase.exec(entity);
+    const result = await usecase.exec({
+      name: faker.person.fullName(),
+      email: entity.email.value,
+      password: faker.internet.password(),
+    });
 
     expect(result).toBeInstanceOf(Left);
     expect(result.value).toBeInstanceOf(DuplicatedEmailError);

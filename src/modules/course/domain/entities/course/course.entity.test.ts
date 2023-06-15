@@ -21,6 +21,6 @@ describe('CourseEntity', () => {
     expect((entity.value as CourseEntity).title).toEqual(title);
     expect((entity.value as CourseEntity).description).toEqual(description);
     expect((entity.value as CourseEntity).instructor).toEqual(instructor);
-    expect((entity.value as CourseEntity).price).toEqual(price);
+    expect((entity.value as CourseEntity).price.amount).toEqual(price);
   });
 });

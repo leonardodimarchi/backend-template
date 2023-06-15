@@ -56,12 +56,12 @@ export class UserEntity extends BaseEntity<UserEntityProps> {
     );
   }
 
-  get name(): string {
-    return this.props.name.value;
+  get name(): Name {
+    return this.props.name;
   }
 
-  get email(): string {
-    return this.props.email.value;
+  get email(): Email {
+    return this.props.email;
   }
 
   get password(): string {

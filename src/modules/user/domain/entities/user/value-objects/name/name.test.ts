@@ -1,4 +1,3 @@
-import { InvalidNameError } from '@modules/user/domain/errors/invalid-name.error';
 import { Name } from '.';
 import { faker } from '@faker-js/faker';
 import { Left, Right } from '@shared/helpers/either';

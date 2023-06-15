@@ -26,8 +26,8 @@ export class TypeOrmUserMapper {
   static toSchema(entity: UserEntity): UserSchema {
     return UserSchema.create({
       id: entity.id,
-      name: entity.name,
-      email: entity.email,
+      name: entity.name.value,
+      email: entity.email.value,
       password: entity.password,
     });
   }

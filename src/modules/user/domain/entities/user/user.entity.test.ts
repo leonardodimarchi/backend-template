@@ -15,8 +15,8 @@ describe('UserEntity', () => {
 
     expect(entity).toBeInstanceOf(Right);
 
-    expect((entity.value as UserEntity).name).toBe(name);
-    expect((entity.value as UserEntity).email).toBe(email);
+    expect((entity.value as UserEntity).name.value).toBe(name);
+    expect((entity.value as UserEntity).email.value).toBe(email);
     expect((entity.value as UserEntity).password).toBe(password);
   });
 });

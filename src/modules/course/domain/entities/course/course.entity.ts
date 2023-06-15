@@ -1,18 +1,22 @@
 import { BaseEntity, BaseEntityProps } from '@shared/domain/base.entity';
 import { Replace } from '@shared/helpers/replace';
-import { Either, Right } from '@shared/helpers/either';
+import { Either, Left, Right } from '@shared/helpers/either';
 import { UserEntity } from '@modules/user/domain/entities/user/user.entity';
+import { Money } from './value-objects/money';
+import { InvalidMoneyError } from '../../errors/invalid-money.error';
 
 export interface CourseEntityProps {
   title: string;
   description: string;
-  price: number;
+  price: Money;
   instructor: UserEntity;
 }
 
 export type CourseEntityCreateProps = Replace<
   CourseEntityProps,
-  {}
+  {
+    price: number;
+  }
 >;
 
 export class CourseEntity extends BaseEntity<CourseEntityProps> {
@@ -27,13 +31,19 @@ export class CourseEntity extends BaseEntity<CourseEntityProps> {
   static create(
     { title, description, price, instructor }: CourseEntityCreateProps,
     baseEntityProps?: BaseEntityProps
-  ): Either<Error, CourseEntity> {
+  ): Either<InvalidMoneyError, CourseEntity> {
+    const priceValue = Money.create(price);
+
+    if (priceValue.isLeft()) {
+      return new Left(priceValue.value);
+    }
+
     return new Right(
       new CourseEntity(
         {
           title,
           description,
-          price,
+          price: priceValue.value,
           instructor,
         },
         baseEntityProps
@@ -57,11 +67,11 @@ export class CourseEntity extends BaseEntity<CourseEntityProps> {
     this.props.description = description;
   }
 
-  public get price(): number {
+  public get price(): Money {
     return this.props.price;
   }
 
-  public set price(price: number) {
+  public set price(price: Money) {
     this.props.price = price;
   }
 

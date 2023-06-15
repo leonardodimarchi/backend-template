@@ -23,21 +23,10 @@ export class MockUser {
     const overrideProps = override ?? {};
     const entityPropsOverride = basePropsOverride ?? {};
 
-    const email = Email.create(faker.internet.email());
-    const name = Name.create(faker.person.fullName());
-
-    if (email.isLeft()) {
-      throw new Error(`Mock user email error: ${ email.value }`)
-    }
-
-    if (name.isLeft()) {
-      throw new Error(`Mock user name error: ${ name.value }`)
-    }
-
     const user = UserEntity.create(
       {
-        email: email.value.value,
-        name: name.value.value,
+        email: faker.internet.email(),
+        name: faker.person.fullName(),
         password: faker.internet.password(),
         ...overrideProps,
       },
@@ -68,5 +57,5 @@ export class MockUser {
       name: faker.person.fullName(),
       password: faker.internet.password(),
     }
-  } 
+  }
 }

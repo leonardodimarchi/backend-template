@@ -12,6 +12,6 @@ export class InMemoryUserRepository
   }
 
   async isDuplicatedEmail(email: string): Promise<boolean> {
-    return !!this.items.find((u) => u.email === email);
+    return !!this.items.find((u) => u.email.value === email);
   }
 }
