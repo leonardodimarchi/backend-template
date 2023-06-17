@@ -1,19 +1,25 @@
 import { UseCase } from '@shared/domain/usecase';
 import { CourseEntity } from '../entities/course/course.entity';
-import { Either } from '@shared/helpers/either';
+import { Either, Left, Right } from '@shared/helpers/either';
+import { MockUser } from 'test/factories/mock-user';
+import { InvalidMoneyError } from '../errors/invalid-money.error';
+import { CourseRepository } from '../repositories/course.repository';
+import { UUID } from 'crypto';
+import { UserRepository } from '@modules/user/domain/repositories/user.repository';
+import { InstructorNotFoundError } from '../errors/instructor-not-found.error';
 
 export interface CreateCourseUseCaseInput {
   title: string;
   description: string;
   price: number;
-  instructorId: string;
+  instructorId: UUID;
 }
 
 export interface CreateCourseUseCaseOutput {
   createdCourse: CourseEntity;
 }
 
-export type CreateCourseUseCaseErrors = any;
+export type CreateCourseUseCaseErrors = InvalidMoneyError;
 
 export class CreateCourseUseCase
   implements
@@ -23,6 +29,11 @@ export class CreateCourseUseCase
       CreateCourseUseCaseErrors
     >
 {
+  constructor(
+    private readonly repository: CourseRepository,
+    private readonly userRepository: UserRepository
+  ) {}
+
   async exec({
     title,
     description,
@@ -31,6 +42,25 @@ export class CreateCourseUseCase
   }: CreateCourseUseCaseInput): Promise<
     Either<CreateCourseUseCaseErrors, CreateCourseUseCaseOutput>
   > {
-    throw new Error('Method not implemented.');
+    const instructor = await this.userRepository.getById(instructorId);
+
+    if (!instructor) {
+      return new Left(new InstructorNotFoundError(instructorId));
+    }
+
+    const courseResult = CourseEntity.create({
+      title,
+      description,
+      price,
+      instructor,
+    });
+
+    if (courseResult.isLeft()) {
+      return new Left(courseResult.value);
+    }
+
+    await this.repository.save(courseResult.value);
+
+    return new Right({ createdCourse: courseResult.value });
   }
 }
