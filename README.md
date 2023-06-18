@@ -1,4 +1,6 @@
-# Backend Template
+[![Backend Template](https://readme-typing-svg.demolab.com?font=Poppins&size=26&duration=2500&pause=1000&color=F7F7F7&vCenter=true&width=435&height=30&lines=Backend+Template)](https://git.io/typing-svg)
+
+---
 
 ![License](https://img.shields.io/github/license/leonardodimarchi/backend-template)
 ![Build](https://img.shields.io/github/actions/workflow/status/leonardodimarchi/backend-template/build.yml)
