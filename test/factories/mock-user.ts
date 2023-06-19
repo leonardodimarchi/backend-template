@@ -3,8 +3,6 @@ import {
   UserEntity,
   UserEntityCreateProps,
 } from '@modules/user/domain/entities/user/user.entity';
-import { Email } from '@modules/user/domain/entities/user/value-objects/email';
-import { Name } from '@modules/user/domain/entities/user/value-objects/name';
 import { CreateUserPayload } from '@modules/user/presenter/models/payloads/create-user.payload';
 import { UserViewModel } from '@modules/user/presenter/models/view-models/user.view-model';
 import { BaseEntityProps } from '@shared/domain/base.entity';
