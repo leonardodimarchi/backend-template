@@ -1,0 +1,15 @@
+{
+  "validations": {
+    "TITLE_IS_DEFINED": "É necessário enviar o título do curso.",
+    "TITLE_IS_STRING": "O título do curso deve ser um texto válido.",
+    "TITLE_IS_NOT_EMPTY": "O título do curso não pode estar vazio.",
+    "DESCRIPTION_IS_DEFINED": "É necessário enviar a descrição do curso.",
+    "DESCRIPTION_IS_STRING": "A descrição do curso deve ser um texto válido.",
+    "DESCRIPTION_IS_NOT_EMPTY": "A descrição do curso não pode estar vazio.",
+    "PRICE_IS_DEFINED": "É necessário enviar o preço do curso.",
+    "PRICE_IS_NUMBER": "O preço do curso deve ser um número.",
+    "PRICE_MIN": "O preço do curso não pode ser negativo.",
+    "INSTRUCTOR_IS_DEFINED": "É necessário enviar o instrutor do curso.",
+    "INSTRUCTOR_IS_UUID": "A identificação do instrutor do curso não é válida."
+  }
+}

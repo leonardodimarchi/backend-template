@@ -1,0 +1,15 @@
+{
+  "validations": {
+    "TITLE_IS_DEFINED": "Course title must be defined.",
+    "TITLE_IS_STRING": "Course title must be a valid text.",
+    "TITLE_IS_NOT_EMPTY": "Course title must not be empty.",
+    "DESCRIPTION_IS_DEFINED": "Course description must be defined.",
+    "DESCRIPTION_IS_STRING": "Course description must be a valid text.",
+    "DESCRIPTION_IS_NOT_EMPTY": "Course description must not be empty.",
+    "PRICE_IS_DEFINED": "Course price must be defined.",
+    "PRICE_IS_NUMBER": "Course price must be a number.",
+    "PRICE_MIN": "The price must not be negative.",
+    "INSTRUCTOR_IS_DEFINED": "Course instructor must be defined.",
+    "INSTRUCTOR_IS_UUID": "Course instructor ID is not valid."
+  }
+}

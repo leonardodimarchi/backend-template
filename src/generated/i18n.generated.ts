@@ -2,6 +2,21 @@
 
 import { Path } from "nestjs-i18n";
 export type I18nTranslations = {
+    "course": {
+        "validations": {
+            "TITLE_IS_DEFINED": string;
+            "TITLE_IS_STRING": string;
+            "TITLE_IS_NOT_EMPTY": string;
+            "DESCRIPTION_IS_DEFINED": string;
+            "DESCRIPTION_IS_STRING": string;
+            "DESCRIPTION_IS_NOT_EMPTY": string;
+            "PRICE_IS_DEFINED": string;
+            "PRICE_IS_NUMBER": string;
+            "PRICE_MIN": string;
+            "INSTRUCTOR_IS_DEFINED": string;
+            "INSTRUCTOR_IS_UUID": string;
+        };
+    };
     "user": {
         "validations": {
             "EMAIL_IS_EMAIL": string;
