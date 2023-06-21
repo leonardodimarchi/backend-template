@@ -1,7 +1,6 @@
 import { UseCase } from '@shared/domain/usecase';
 import { CourseEntity } from '../entities/course/course.entity';
 import { Either, Left, Right } from '@shared/helpers/either';
-import { MockUser } from 'test/factories/mock-user';
 import { InvalidMoneyError } from '../errors/invalid-money.error';
 import { CourseRepository } from '../repositories/course.repository';
 import { UUID } from 'crypto';
