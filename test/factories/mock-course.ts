@@ -3,6 +3,8 @@ import { CourseEntity, CourseEntityCreateProps } from "@modules/course/domain/en
 import { BaseEntityProps } from "@shared/domain/base.entity";
 import { MockUser } from "./mock-user";
 import { UUID } from "crypto";
+import { CourseViewModel } from "@modules/course/presenter/models/view-models/course.view-model";
+import { CreateCoursePayload } from "@modules/course/presenter/models/payloads/create-course.payload";
 
 interface CreateMockCourseOverrideProps {
   override?: Partial<CourseEntityCreateProps>;
@@ -38,5 +40,21 @@ export class MockCourse {
     }
 
     return course.value;
+  }
+
+
+  static createViewModel(override: CreateMockCourseOverrideProps = {}): CourseViewModel {
+    const entity = MockCourse.createEntity(override);
+
+    return new CourseViewModel(entity);
+  }
+
+  static createPayload(): CreateCoursePayload {
+    return {
+      title: faker.lorem.sentence(),
+      description: faker.lorem.paragraph(),
+      price: +faker.commerce.price(),
+      instructorId: faker.string.uuid() as UUID,
+    }
   }
 }
