@@ -1,3 +1,4 @@
+import { CourseModule } from '@modules/course/course.module';
 import { UserModule } from '@modules/user/user.module';
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from '@shared/infra/database/database.module';
@@ -6,8 +7,6 @@ import * as path from 'path';
 
 @Module({
   imports: [
-    DatabaseModule,
-    UserModule,
     I18nModule.forRoot({
       fallbackLanguage: 'en',
       loaderOptions: {
@@ -20,6 +19,9 @@ import * as path from 'path';
       ],
       typesOutputPath: path.join(__dirname, '../src/generated/i18n.generated.ts'),
     }),
+    DatabaseModule,
+    UserModule,
+    CourseModule,
   ],
   controllers: [],
   providers: [],
