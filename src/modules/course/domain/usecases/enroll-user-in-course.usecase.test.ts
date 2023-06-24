@@ -15,6 +15,7 @@ import { CourseEntity } from '../entities/course/course.entity';
 import { InMemoryCourseRepository } from 'test/repositories/in-memory-course-repository';
 import { MockCourse } from 'test/factories/mock-course';
 import { CourseNotFoundError } from '../errors/course-not-found.error';
+import { StudentAlreadyEnrolledError } from '../errors/student-already-enrolled.error';
 
 describe('EnrollUserInCourseUseCase', () => {
   let usecase: EnrollUserInCourseUseCase;
@@ -32,7 +33,7 @@ describe('EnrollUserInCourseUseCase', () => {
     usecase = new EnrollUserInCourseUseCase(
       enrollmentRespository,
       userRepository,
-      courseRepository,
+      courseRepository
     );
   });
 
@@ -91,5 +92,26 @@ describe('EnrollUserInCourseUseCase', () => {
 
     expect(result.isLeft()).toBeTruthy();
     expect(result.value).toBeInstanceOf(CourseNotFoundError);
+  });
+
+  it('should return an error if the the user is already enrolled at the course', async () => {
+    const studentId = faker.string.uuid() as UUID;
+    const courseId = faker.string.uuid() as UUID;
+
+    createStudentWithId(studentId);
+    createCourseWithId(courseId);
+
+    await usecase.exec({
+      studentId,
+      courseId,
+    });
+
+    const result = await usecase.exec({
+      studentId,
+      courseId,
+    });
+
+    expect(result.isLeft()).toBeTruthy();
+    expect(result.value).toBeInstanceOf(StudentAlreadyEnrolledError);
   });
 });

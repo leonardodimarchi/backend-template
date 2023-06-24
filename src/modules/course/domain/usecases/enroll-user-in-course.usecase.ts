@@ -7,6 +7,7 @@ import { UserRepository } from '@modules/user/domain/repositories/user.repositor
 import { StudentNotFoundError } from '../errors/student-not-found.error';
 import { CourseRepository } from '../repositories/course.repository';
 import { CourseNotFoundError } from '../errors/course-not-found.error';
+import { StudentAlreadyEnrolledError } from '../errors/student-already-enrolled.error';
 
 export interface EnrollUserInCourseUseCaseInput {
   studentId: UUID;
@@ -30,7 +31,7 @@ export class EnrollUserInCourseUseCase
   constructor(
     private readonly enrollmentRepository: EnrollmentRepository,
     private readonly userRepository: UserRepository,
-    private readonly courseRepository: CourseRepository,
+    private readonly courseRepository: CourseRepository
   ) {}
 
   async exec({
@@ -49,6 +50,14 @@ export class EnrollUserInCourseUseCase
 
     if (!student) {
       return new Left(new StudentNotFoundError(studentId));
+    }
+
+    const enrollmentAlreadyExists = await this.enrollmentRepository
+      .getByStudentAndCourse(studentId, courseId)
+      .then((r) => !!r);
+
+    if (enrollmentAlreadyExists) {
+      return new Left(new StudentAlreadyEnrolledError(studentId, courseId));
     }
 
     const enrollment = EnrollmentEntity.create({
