@@ -7,7 +7,6 @@ import {
   HttpStatus,
   InternalServerErrorException,
   Post,
-  UseFilters,
 } from '@nestjs/common';
 import { UserViewModel } from '../models/view-models/user.view-model';
 import { CreateUserPayload } from '../models/payloads/create-user.payload';

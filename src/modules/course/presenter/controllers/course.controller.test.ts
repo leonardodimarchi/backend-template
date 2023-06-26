@@ -1,10 +1,14 @@
 import { DeepMocked, createMock } from 'test/utils/create-mock';
-import { Right } from '@shared/helpers/either';
+import { Left, Right } from '@shared/helpers/either';
 import { createI18nMock } from 'test/utils/create-i18n-mock';
 import { CourseController } from './course.controller';
 import { CreateCourseUseCase, CreateCourseUseCaseInput } from '@modules/course/domain/usecases/create-course.usecase';
 import { MockCourse } from 'test/factories/mock-course';
 import { CourseViewModel } from '../models/view-models/course.view-model';
+import { InvalidMoneyError } from '@modules/course/domain/errors/invalid-money.error';
+import { faker } from '@faker-js/faker';
+import { CurrencyCode } from '@modules/course/domain/entities/course/value-objects/money';
+import { BadRequestException } from '@nestjs/common';
 
 describe('CourseController', () => {
   let controller: CourseController;
@@ -47,6 +51,17 @@ describe('CourseController', () => {
         price: payload.price,
         instructorId: payload.instructorId,
       });
+    });
+
+    it('should throw a 403 http exception when receiving a invalid money error', async () => {
+      createCourseUseCase.exec.mockResolvedValueOnce(
+        new Left(new InvalidMoneyError(+faker.commerce.price(), CurrencyCode.USD))
+      );
+
+      const call = async () =>
+       await controller.create(MockCourse.createPayload(), createI18nMock());
+
+      expect(call).rejects.toThrow(BadRequestException);
     });
   });
 });

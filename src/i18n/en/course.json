@@ -11,5 +11,8 @@
     "PRICE_MIN": "The price must not be negative.",
     "INSTRUCTOR_IS_DEFINED": "Course instructor must be defined.",
     "INSTRUCTOR_IS_UUID": "Course instructor ID is not valid."
+  },
+  "errors": {
+    "invalid-money": "The provided price is invalid."
   }
 }

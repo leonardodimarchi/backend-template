@@ -11,6 +11,14 @@
       }
     ]
   },
+  "testPathIgnorePatterns": [
+    "/node_modules",
+    "/postgres-data"
+  ],
+  "watchPathIgnorePatterns": [
+    "/node_modules",
+    "/postgres-data"
+  ],
   "collectCoverageFrom": ["**/*.(t|j)s"],
   "coverageDirectory": "../coverage",
   "testEnvironment": "node",

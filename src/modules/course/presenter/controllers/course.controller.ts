@@ -1,4 +1,5 @@
 import {
+    BadRequestException,
   Body,
   Controller,
   HttpStatus,
@@ -11,6 +12,7 @@ import { I18nTranslations } from 'src/generated/i18n.generated';
 import { CreateCourseUseCase } from '@modules/course/domain/usecases/create-course.usecase';
 import { CourseViewModel } from '../models/view-models/course.view-model';
 import { CreateCoursePayload } from '../models/payloads/create-course.payload';
+import { InvalidMoneyError } from '@modules/course/domain/errors/invalid-money.error';
 
 @ApiTags('Courses')
 @Controller('courses')
@@ -38,6 +40,12 @@ export class CourseController {
 
     if (result.isRight()) {
       return new CourseViewModel(result.value.createdCourse);
+    }
+
+    if (result.value instanceof InvalidMoneyError) {
+      throw new BadRequestException(i18n.t('course.errors.invalid-money'), {
+        cause: result.value,
+      });
     }
 
     throw new InternalServerErrorException();
