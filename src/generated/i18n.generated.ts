@@ -16,6 +16,10 @@ export type I18nTranslations = {
             "INSTRUCTOR_IS_DEFINED": string;
             "INSTRUCTOR_IS_UUID": string;
         };
+        "errors": {
+            "invalid-money": string;
+            "instructor-not-found": string;
+        };
     };
     "user": {
         "validations": {

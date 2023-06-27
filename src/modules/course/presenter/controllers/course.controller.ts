@@ -1,9 +1,10 @@
 import {
-    BadRequestException,
+  BadRequestException,
   Body,
   Controller,
   HttpStatus,
   InternalServerErrorException,
+  NotFoundException,
   Post,
 } from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -13,11 +14,12 @@ import { CreateCourseUseCase } from '@modules/course/domain/usecases/create-cour
 import { CourseViewModel } from '../models/view-models/course.view-model';
 import { CreateCoursePayload } from '../models/payloads/create-course.payload';
 import { InvalidMoneyError } from '@modules/course/domain/errors/invalid-money.error';
+import { InstructorNotFoundError } from '@modules/course/domain/errors/instructor-not-found.error';
 
 @ApiTags('Courses')
 @Controller('courses')
 export class CourseController {
-  constructor(private readonly createCourseUseCase: CreateCourseUseCase) {}
+  constructor(private readonly createCourseUseCase: CreateCourseUseCase) { }
 
   @ApiOperation({ summary: 'Creates a new course' })
   @ApiHeader({ name: 'Accept-Language', example: 'en', required: true })
@@ -29,7 +31,7 @@ export class CourseController {
       description,
       price,
       instructorId,
-     } = payload;
+    } = payload;
 
     const result = await this.createCourseUseCase.exec({
       title,
@@ -44,6 +46,12 @@ export class CourseController {
 
     if (result.value instanceof InvalidMoneyError) {
       throw new BadRequestException(i18n.t('course.errors.invalid-money'), {
+        cause: result.value,
+      });
+    }
+
+    if (result.value instanceof InstructorNotFoundError) {
+      throw new NotFoundException(i18n.t('course.errors.instructor-not-found', { args: { instructorId: result.value.instructorId } }), {
         cause: result.value,
       });
     }

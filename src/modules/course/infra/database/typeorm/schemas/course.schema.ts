@@ -10,7 +10,7 @@ export class CourseSchema extends BaseSchema {
   @Column()
   description: string;
 
-  @Column()
+  @Column({ type: 'decimal' })
   price: number;
 
   @ManyToOne(() => UserSchema, { eager: true })

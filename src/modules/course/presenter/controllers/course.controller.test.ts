@@ -8,7 +8,8 @@ import { CourseViewModel } from '../models/view-models/course.view-model';
 import { InvalidMoneyError } from '@modules/course/domain/errors/invalid-money.error';
 import { faker } from '@faker-js/faker';
 import { CurrencyCode } from '@modules/course/domain/entities/course/value-objects/money';
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { InstructorNotFoundError } from '@modules/course/domain/errors/instructor-not-found.error';
 
 describe('CourseController', () => {
   let controller: CourseController;
@@ -62,6 +63,17 @@ describe('CourseController', () => {
        await controller.create(MockCourse.createPayload(), createI18nMock());
 
       expect(call).rejects.toThrow(BadRequestException);
+    });
+
+    it('should throw a 404 http exception when receiving a instructor not found error', async () => {
+      createCourseUseCase.exec.mockResolvedValueOnce(
+        new Left(new InstructorNotFoundError(faker.string.uuid()))
+      );
+
+      const call = async () =>
+       await controller.create(MockCourse.createPayload(), createI18nMock());
+
+      expect(call).rejects.toThrow(NotFoundException);
     });
   });
 });

@@ -6,9 +6,10 @@ import { CourseRepository } from './domain/repositories/course.repository';
 import { UserRepository } from '@modules/user/domain/repositories/user.repository';
 import { EnrollUserInCourseUseCase } from './domain/usecases/enroll-user-in-course.usecase';
 import { EnrollmentRepository } from './domain/repositories/enrollment.repository';
+import { UserDatabaseModule } from '@modules/user/infra/database/user-database.module';
 
 @Module({
-  imports: [CourseDatabaseModule],
+  imports: [UserDatabaseModule, CourseDatabaseModule],
   controllers: [CourseController],
   providers: [
     {

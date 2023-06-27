@@ -5,7 +5,7 @@
     "TITLE_IS_NOT_EMPTY": "O título do curso não pode estar vazio.",
     "DESCRIPTION_IS_DEFINED": "É necessário enviar a descrição do curso.",
     "DESCRIPTION_IS_STRING": "A descrição do curso deve ser um texto válido.",
-    "DESCRIPTION_IS_NOT_EMPTY": "A descrição do curso não pode estar vazio.",
+    "DESCRIPTION_IS_NOT_EMPTY": "A descrição do curso não pode estar vazia.",
     "PRICE_IS_DEFINED": "É necessário enviar o preço do curso.",
     "PRICE_IS_NUMBER": "O preço do curso deve ser um número.",
     "PRICE_MIN": "O preço do curso não pode ser negativo.",
@@ -13,6 +13,7 @@
     "INSTRUCTOR_IS_UUID": "A identificação do instrutor do curso não é válida."
   },
   "errors": {
-    "invalid-money": "O preço do curso está inválido."
+    "invalid-money": "O preço do curso está inválido.",
+    "instructor-not-found": "Não foi possível identificar um instrutor com a identificação {instructorId}."
   }
 }

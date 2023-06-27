@@ -18,7 +18,7 @@ export interface CreateCourseUseCaseOutput {
   createdCourse: CourseEntity;
 }
 
-export type CreateCourseUseCaseErrors = InvalidMoneyError;
+export type CreateCourseUseCaseErrors = InvalidMoneyError | InstructorNotFoundError;
 
 export class CreateCourseUseCase
   implements

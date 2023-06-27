@@ -23,7 +23,7 @@ export class CreateCoursePayload {
   @Min(0, { message: i18nValidationMessage<I18nTranslations>('course.validations.PRICE_MIN') })
   price: number;
 
-  @ApiProperty({ example: 'john.doe@email.com' })
+  @ApiProperty({ example: '<UUID>' })
   @IsDefined({ message: i18nValidationMessage<I18nTranslations>('course.validations.INSTRUCTOR_IS_DEFINED') })
   @IsUUID(4, { message: i18nValidationMessage<I18nTranslations>('course.validations.INSTRUCTOR_IS_UUID') })
   instructorId: UUID;
