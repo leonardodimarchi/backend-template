@@ -9,23 +9,23 @@ import { CourseRepository } from '../repositories/course.repository';
 import { CourseNotFoundError } from '../errors/course-not-found.error';
 import { StudentAlreadyEnrolledError } from '../errors/student-already-enrolled.error';
 
-export interface EnrollUserInCourseUseCaseInput {
+export interface EnrollStudentInCourseUseCaseInput {
   studentId: UUID;
   courseId: UUID;
 }
 
-export interface EnrollUserInCourseUseCaseOutput {
+export interface EnrollStudentInCourseUseCaseOutput {
   createdEnrollment: EnrollmentEntity;
 }
 
-export type EnrollUserInCourseUseCaseErrors = Error;
+export type EnrollStudentInCourseUseCaseErrors = Error;
 
-export class EnrollUserInCourseUseCase
+export class EnrollStudentInCourseUseCase
   implements
     UseCase<
-      EnrollUserInCourseUseCaseInput,
-      EnrollUserInCourseUseCaseOutput,
-      EnrollUserInCourseUseCaseErrors
+      EnrollStudentInCourseUseCaseInput,
+      EnrollStudentInCourseUseCaseOutput,
+      EnrollStudentInCourseUseCaseErrors
     >
 {
   constructor(
@@ -37,8 +37,8 @@ export class EnrollUserInCourseUseCase
   async exec({
     studentId,
     courseId,
-  }: EnrollUserInCourseUseCaseInput): Promise<
-    Either<EnrollUserInCourseUseCaseErrors, EnrollUserInCourseUseCaseOutput>
+  }: EnrollStudentInCourseUseCaseInput): Promise<
+    Either<EnrollStudentInCourseUseCaseErrors, EnrollStudentInCourseUseCaseOutput>
   > {
     const course = await this.courseRepository.getById(courseId);
 

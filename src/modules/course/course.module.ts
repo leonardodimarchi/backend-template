@@ -4,7 +4,7 @@ import { CourseController } from './presenter/controllers/course.controller';
 import { CreateCourseUseCase } from './domain/usecases/create-course.usecase';
 import { CourseRepository } from './domain/repositories/course.repository';
 import { UserRepository } from '@modules/user/domain/repositories/user.repository';
-import { EnrollUserInCourseUseCase } from './domain/usecases/enroll-user-in-course.usecase';
+import { EnrollStudentInCourseUseCase } from './domain/usecases/enroll-user-in-course.usecase';
 import { EnrollmentRepository } from './domain/repositories/enrollment.repository';
 import { UserDatabaseModule } from '@modules/user/infra/database/user-database.module';
 
@@ -23,13 +23,13 @@ import { UserDatabaseModule } from '@modules/user/infra/database/user-database.m
       inject: [CourseRepository, UserRepository],
     },
     {
-      provide: EnrollUserInCourseUseCase,
+      provide: EnrollStudentInCourseUseCase,
       useFactory: (
         repository: CourseRepository,
         enrollmentRepository: EnrollmentRepository,
         userRepository: UserRepository,
       ) => {
-        return new EnrollUserInCourseUseCase(enrollmentRepository, userRepository, repository);
+        return new EnrollStudentInCourseUseCase(enrollmentRepository, userRepository, repository);
       },
       inject: [CourseRepository, EnrollmentRepository, UserRepository],
     },

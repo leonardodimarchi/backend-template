@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { EnrollUserInCourseUseCase } from './enroll-user-in-course.usecase';
+import { EnrollStudentInCourseUseCase } from './enroll-user-in-course.usecase';
 import { UUID } from 'crypto';
 import { InMemoryRepository } from 'test/repositories/in-memory-repository';
 import { EnrollmentEntity } from '../entities/enrollment/enrollment.entity';
@@ -17,8 +17,8 @@ import { MockCourse } from 'test/factories/mock-course';
 import { CourseNotFoundError } from '../errors/course-not-found.error';
 import { StudentAlreadyEnrolledError } from '../errors/student-already-enrolled.error';
 
-describe('EnrollUserInCourseUseCase', () => {
-  let usecase: EnrollUserInCourseUseCase;
+describe('EnrollStudentInCourseUseCase', () => {
+  let usecase: EnrollStudentInCourseUseCase;
   let enrollmentRespository: InMemoryRepository<
     EnrollmentRepository,
     EnrollmentEntity
@@ -30,7 +30,7 @@ describe('EnrollUserInCourseUseCase', () => {
     enrollmentRespository = new InMemoryEnrollmentRepository();
     userRepository = new InMemoryUserRepository();
     courseRepository = new InMemoryCourseRepository();
-    usecase = new EnrollUserInCourseUseCase(
+    usecase = new EnrollStudentInCourseUseCase(
       enrollmentRespository,
       userRepository,
       courseRepository
