@@ -10,7 +10,9 @@
     "PRICE_IS_NUMBER": "O preço do curso deve ser um número.",
     "PRICE_MIN": "O preço do curso não pode ser negativo.",
     "INSTRUCTOR_IS_DEFINED": "É necessário enviar o instrutor do curso.",
-    "INSTRUCTOR_IS_UUID": "A identificação do instrutor do curso não é válida."
+    "INSTRUCTOR_IS_UUID": "A identificação do instrutor do curso não é válida.",
+    "STUDENT_IS_DEFINED": "É necessário indicar o estudante para realizar a inscrição no curso.",
+    "STUDENT_IS_UUID": "A identificação do estudante para inscrição não é válida."
   },
   "errors": {
     "invalid-money": "O preço do curso está inválido.",

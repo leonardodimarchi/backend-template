@@ -10,7 +10,9 @@
     "PRICE_IS_NUMBER": "Course price must be a number.",
     "PRICE_MIN": "The price must not be negative.",
     "INSTRUCTOR_IS_DEFINED": "Course instructor must be defined.",
-    "INSTRUCTOR_IS_UUID": "Course instructor ID is not valid."
+    "INSTRUCTOR_IS_UUID": "Course instructor ID is not valid.",
+    "STUDENT_IS_DEFINED": "Student must be defined.",
+    "STUDENT_IS_UUID": "Student ID is not valid."
   },
   "errors": {
     "invalid-money": "The provided price is invalid.",

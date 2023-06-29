@@ -15,6 +15,8 @@ export type I18nTranslations = {
             "PRICE_MIN": string;
             "INSTRUCTOR_IS_DEFINED": string;
             "INSTRUCTOR_IS_UUID": string;
+            "STUDENT_IS_DEFINED": string;
+            "STUDENT_IS_UUID": string;
         };
         "errors": {
             "invalid-money": string;
