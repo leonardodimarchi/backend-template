@@ -1,9 +1,12 @@
 import { CourseEntity } from "@modules/course/domain/entities/course/course.entity";
 import { UserViewModel } from "@modules/user/presenter/models/view-models/user.view-model";
 import { ApiProperty } from "@nestjs/swagger";
+import { BaseEntityViewModel } from "@shared/presenter/models/base-entity.view-model";
 
-export class CourseViewModel {
+export class CourseViewModel extends BaseEntityViewModel {
   constructor(entity: CourseEntity) {
+    super(entity);
+
     this.title = entity.title;
     this.description = entity.description;
     this.price = entity.price.amount;
