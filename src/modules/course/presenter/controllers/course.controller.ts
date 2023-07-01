@@ -15,11 +15,17 @@ import { CourseViewModel } from '../models/view-models/course.view-model';
 import { CreateCoursePayload } from '../models/payloads/create-course.payload';
 import { InvalidMoneyError } from '@modules/course/domain/errors/invalid-money.error';
 import { InstructorNotFoundError } from '@modules/course/domain/errors/instructor-not-found.error';
+import { EnrollmentViewModel } from '../models/view-models/enrollment.view-model';
+import { EnrollStudentPayload } from '../models/payloads/enroll-student.payload';
+import { EnrollStudentInCourseUseCase } from '@modules/course/domain/usecases/enroll-user-in-course.usecase';
 
 @ApiTags('Courses')
 @Controller('courses')
 export class CourseController {
-  constructor(private readonly createCourseUseCase: CreateCourseUseCase) { }
+  constructor(
+    private readonly createCourseUseCase: CreateCourseUseCase,
+    private readonly enrollStudentInCourseUseCase: EnrollStudentInCourseUseCase,
+  ) { }
 
   @ApiOperation({ summary: 'Creates a new course' })
   @ApiHeader({ name: 'Accept-Language', example: 'en', required: true })
@@ -54,6 +60,28 @@ export class CourseController {
       throw new NotFoundException(i18n.t('course.errors.instructor-not-found', { args: { instructorId: result.value.instructorId } }), {
         cause: result.value,
       });
+    }
+
+    throw new InternalServerErrorException();
+  }
+
+  @ApiOperation({ summary: 'Enroll the student at a course' })
+  @ApiHeader({ name: 'Accept-Language', example: 'en', required: true })
+  @ApiResponse({ status: HttpStatus.CREATED, type: EnrollmentViewModel })
+  @Post()
+  async enrollStudent(@Body() payload: EnrollStudentPayload, @I18n() i18n: I18nContext<I18nTranslations>): Promise<EnrollmentViewModel> {
+    const {
+      studentId,
+      courseId,
+    } = payload;
+
+    const result = await this.enrollStudentInCourseUseCase.exec({
+      courseId,
+      studentId,
+    });
+
+    if (result.isRight()) {
+      return new EnrollmentViewModel(result.value.createdEnrollment);
     }
 
     throw new InternalServerErrorException();

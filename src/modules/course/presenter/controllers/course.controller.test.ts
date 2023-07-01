@@ -10,14 +10,19 @@ import { faker } from '@faker-js/faker';
 import { CurrencyCode } from '@modules/course/domain/entities/course/value-objects/money';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { InstructorNotFoundError } from '@modules/course/domain/errors/instructor-not-found.error';
+import { MockEnrollment } from 'test/factories/mock-enrollment';
+import { EnrollmentViewModel } from '../models/view-models/enrollment.view-model';
+import { EnrollStudentInCourseUseCase, EnrollStudentInCourseUseCaseInput } from '@modules/course/domain/usecases/enroll-user-in-course.usecase';
 
 describe('CourseController', () => {
   let controller: CourseController;
   let createCourseUseCase: DeepMocked<CreateCourseUseCase>;
+  let enrollStudentInCourseUseCase: DeepMocked<EnrollStudentInCourseUseCase>;
 
   beforeEach(() => {
     createCourseUseCase = createMock<CreateCourseUseCase>();
-    controller = new CourseController(createCourseUseCase);
+    enrollStudentInCourseUseCase = createMock<EnrollStudentInCourseUseCase>();
+    controller = new CourseController(createCourseUseCase, enrollStudentInCourseUseCase);
   });
 
   describe('create', () => {
@@ -60,7 +65,7 @@ describe('CourseController', () => {
       );
 
       const call = async () =>
-       await controller.create(MockCourse.createPayload(), createI18nMock());
+        await controller.create(MockCourse.createPayload(), createI18nMock());
 
       expect(call).rejects.toThrow(BadRequestException);
     });
@@ -71,9 +76,42 @@ describe('CourseController', () => {
       );
 
       const call = async () =>
-       await controller.create(MockCourse.createPayload(), createI18nMock());
+        await controller.create(MockCourse.createPayload(), createI18nMock());
 
       expect(call).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('enrollStudent', () => {
+    it('should return an enrollment view model', async () => {
+      const createdEnrollment = MockEnrollment.createEntity();
+      const expectedResult = new EnrollmentViewModel(createdEnrollment);
+
+      enrollStudentInCourseUseCase.exec.mockResolvedValueOnce(new Right({ createdEnrollment }));
+
+      const result = await controller.enrollStudent(MockEnrollment.createPayload(), createI18nMock());
+
+      expect(result).toBeInstanceOf(EnrollmentViewModel);
+      expect(result).toEqual(expectedResult);
+    });
+
+    it('should call the usecase with the correct params', async () => {
+      const createdEnrollment = MockEnrollment.createEntity();
+      const payload = MockEnrollment.createPayload();
+
+      jest
+        .spyOn(enrollStudentInCourseUseCase, 'exec')
+        .mockResolvedValueOnce(new Right({ createdEnrollment }));
+
+      await controller.enrollStudent(payload, createI18nMock());
+
+      expect(enrollStudentInCourseUseCase.exec).toHaveBeenCalledTimes(1);
+      expect(enrollStudentInCourseUseCase.exec).toHaveBeenCalledWith<
+        [EnrollStudentInCourseUseCaseInput]
+      >({
+        courseId: payload.courseId,
+        studentId: payload.studentId,
+      });
     });
   });
 });
