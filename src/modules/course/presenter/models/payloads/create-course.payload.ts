@@ -12,8 +12,6 @@ import { i18nValidationMessage } from 'nestjs-i18n'
 import { I18nTranslations } from 'src/generated/i18n.generated'
 
 export class CreateCoursePayload {
-  constructor(private readonly i18n: I18nTranslations) {}
-
   @ApiProperty({ example: 'Flutter with Clean Architecture and TDD' })
   @IsDefined({
     message: i18nValidationMessage<I18nTranslations>(
