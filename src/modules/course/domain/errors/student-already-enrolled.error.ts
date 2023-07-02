@@ -1,9 +1,14 @@
-import { DomainError } from '@shared/domain/domain.error';
+import { DomainError } from '@shared/domain/domain.error'
 
 export class StudentAlreadyEnrolledError extends Error implements DomainError {
-  constructor(studentId: string, courseId: string) {
-    super(`Enrollment already exists: ${studentId} at ${courseId}`);
+  public studentId: string
+  public courseId: string
 
-    this.name = 'StudentAlreadyEnrolledError';
+  constructor(studentId: string, courseId: string) {
+    super(`Enrollment already exists: ${studentId} at ${courseId}`)
+
+    this.studentId = studentId
+    this.courseId = courseId
+    this.name = 'StudentAlreadyEnrolledError'
   }
 }

@@ -1,9 +1,12 @@
-import { DomainError } from '@shared/domain/domain.error';
+import { DomainError } from '@shared/domain/domain.error'
 
 export class CourseNotFoundError extends Error implements DomainError {
-  constructor(courseId: string) {
-    super(`Course not found: ${courseId}`);
+  public courseId: string
 
-    this.name = 'CourseNotFoundError';
+  constructor(courseId: string) {
+    super(`Course not found: ${courseId}`)
+
+    this.courseId = courseId
+    this.name = 'CourseNotFoundError'
   }
 }

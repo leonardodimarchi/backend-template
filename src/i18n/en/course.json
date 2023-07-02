@@ -16,6 +16,9 @@
   },
   "errors": {
     "invalid-money": "The provided price is invalid.",
-    "instructor-not-found": "Could not find a instructor with id {instructorId}"
+    "instructor-not-found": "Could not find a instructor with id {instructorId}",
+    "course-not-found": "Could not find a course with id {courseId}",
+    "student-not-found": "Could not find a student with id {studentId}",
+    "student-already-enrolled": "Student with id {studentId} is already enrolled at the course with id {courseId}"
   }
 }

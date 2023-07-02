@@ -1,12 +1,12 @@
-import { Module } from '@nestjs/common';
-import { CourseDatabaseModule } from './infra/database/course-database.module';
-import { CourseController } from './presenter/controllers/course.controller';
-import { CreateCourseUseCase } from './domain/usecases/create-course.usecase';
-import { CourseRepository } from './domain/repositories/course.repository';
-import { UserRepository } from '@modules/user/domain/repositories/user.repository';
-import { EnrollStudentInCourseUseCase } from './domain/usecases/enroll-user-in-course.usecase';
-import { EnrollmentRepository } from './domain/repositories/enrollment.repository';
-import { UserDatabaseModule } from '@modules/user/infra/database/user-database.module';
+import { Module } from '@nestjs/common'
+import { CourseDatabaseModule } from './infra/database/course-database.module'
+import { CourseController } from './presenter/controllers/course.controller'
+import { CreateCourseUseCase } from './domain/usecases/create-course.usecase'
+import { CourseRepository } from './domain/repositories/course.repository'
+import { UserRepository } from '@modules/user/domain/repositories/user.repository'
+import { EnrollStudentInCourseUseCase } from './domain/usecases/enroll-student-in-course.usecase'
+import { EnrollmentRepository } from './domain/repositories/enrollment.repository'
+import { UserDatabaseModule } from '@modules/user/infra/database/user-database.module'
 
 @Module({
   imports: [UserDatabaseModule, CourseDatabaseModule],
@@ -18,7 +18,7 @@ import { UserDatabaseModule } from '@modules/user/infra/database/user-database.m
         repository: CourseRepository,
         userRepository: UserRepository,
       ) => {
-        return new CreateCourseUseCase(repository, userRepository);
+        return new CreateCourseUseCase(repository, userRepository)
       },
       inject: [CourseRepository, UserRepository],
     },
@@ -29,7 +29,11 @@ import { UserDatabaseModule } from '@modules/user/infra/database/user-database.m
         enrollmentRepository: EnrollmentRepository,
         userRepository: UserRepository,
       ) => {
-        return new EnrollStudentInCourseUseCase(enrollmentRepository, userRepository, repository);
+        return new EnrollStudentInCourseUseCase(
+          enrollmentRepository,
+          userRepository,
+          repository,
+        )
       },
       inject: [CourseRepository, EnrollmentRepository, UserRepository],
     },

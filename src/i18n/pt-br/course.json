@@ -16,6 +16,10 @@
   },
   "errors": {
     "invalid-money": "O preço do curso está inválido.",
-    "instructor-not-found": "Não foi possível identificar um instrutor com a identificação {instructorId}."
+    "instructor-not-found": "Não foi possível encontrar um instrutor com a identificação {instructorId}.",
+    "course-not-found": "Não foi possível encontrar um curso com a identificação {courseId}",
+    "student-not-found": "Não foi possível encontrar um estudante com a identificação {studentId}",
+    "student-already-enrolled": "O estudante de identificação {studentId} já está matriculado no curso com identificação {courseId}"
+
   }
 }
