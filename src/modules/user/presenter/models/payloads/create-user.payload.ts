@@ -4,7 +4,6 @@ import { i18nValidationMessage } from 'nestjs-i18n'
 import { I18nTranslations } from 'src/generated/i18n.generated'
 
 export class CreateUserPayload {
-  constructor() {}
   @ApiProperty({ example: 'john.doe@email.com' })
   @IsEmail(
     {},
