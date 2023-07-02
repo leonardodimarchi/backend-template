@@ -2,6 +2,7 @@ module.exports = {
   env: {
     es2021: true,
     node: true,
+    jest: true,
   },
   extends: ['standard', 'plugin:prettier/recommended'],
   parser: '@typescript-eslint/parser',
@@ -22,6 +23,7 @@ module.exports = {
         semi: false,
       },
     ],
+    "no-useless-constructor": "off",
   },
   settings: {
     'import/parsers': {
