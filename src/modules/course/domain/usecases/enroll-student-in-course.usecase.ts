@@ -22,6 +22,7 @@ export type EnrollStudentInCourseUseCaseErrors =
   | CourseNotFoundError
   | StudentNotFoundError
   | StudentAlreadyEnrolledError
+  | Error
 
 export class EnrollStudentInCourseUseCase
   implements
