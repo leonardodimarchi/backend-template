@@ -72,10 +72,10 @@ export class CourseController {
     throw new InternalServerErrorException()
   }
 
-  @ApiOperation({ summary: 'Enroll the student at a course' })
+  @ApiOperation({ summary: 'Enroll a student at a course' })
   @ApiHeader({ name: 'Accept-Language', example: 'en', required: true })
   @ApiResponse({ status: HttpStatus.CREATED, type: EnrollmentViewModel })
-  @Post()
+  @Post('enroll')
   async enrollStudent(
     @Body() payload: EnrollStudentPayload,
     @I18n() i18n: I18nContext<I18nTranslations>,
