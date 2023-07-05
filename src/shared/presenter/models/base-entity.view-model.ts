@@ -1,9 +1,9 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { BaseEntity } from "@shared/domain/base.entity";
-import { UUID } from "crypto";
+import { ApiProperty } from '@nestjs/swagger';
+import { BaseEntity } from '@shared/domain/base.entity';
+import { UUID } from 'crypto';
 
 export class BaseEntityViewModel {
-  constructor(entity: BaseEntity<any>) {
+  constructor(entity: BaseEntity<object>) {
     this.id = entity.id;
     this.createdAt = entity.createdAt;
     this.updatedAt = entity.updatedAt;
