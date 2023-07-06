@@ -6,6 +6,7 @@ import { PasswordEncryptionService } from '../services/password-encryption.servi
 import { InvalidEmailError } from '../errors/invalid-email.error';
 import { Either, Left, Right } from '@shared/helpers/either';
 import { InvalidNameError } from '../errors/invalid-name.error';
+import { UserRole } from '../entities/user/user-role.enum';
 
 export interface CreateUserUseCaseInput {
   name: string;
@@ -17,7 +18,10 @@ export interface CreateUserUseCaseOutput {
   createdUser: UserEntity;
 }
 
-export type CreateUserUseCaseErrors = InvalidEmailError | InvalidNameError | DuplicatedEmailError;
+export type CreateUserUseCaseErrors =
+  | InvalidEmailError
+  | InvalidNameError
+  | DuplicatedEmailError;
 
 export class CreateUserUseCase
   implements
@@ -29,7 +33,7 @@ export class CreateUserUseCase
 {
   constructor(
     private readonly repository: UserRepository,
-    private readonly passwordEncryptionService: PasswordEncryptionService
+    private readonly passwordEncryptionService: PasswordEncryptionService,
   ) {}
 
   async exec({
@@ -43,6 +47,7 @@ export class CreateUserUseCase
       name,
       email,
       password,
+      role: UserRole.STUDENT,
     });
 
     if (user.isLeft()) {
@@ -56,7 +61,7 @@ export class CreateUserUseCase
     }
 
     const encryptedPassword = await this.passwordEncryptionService.hash(
-      user.value.password
+      user.value.password,
     );
 
     user.value.password = encryptedPassword;

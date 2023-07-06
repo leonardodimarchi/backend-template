@@ -8,16 +8,17 @@ export class TypeOrmUserMapper {
         name: schema.name,
         email: schema.email,
         password: schema.password,
+        role: schema.role,
       },
       {
         id: schema.id,
         createdAt: schema.createdAt,
         updatedAt: schema.updatedAt,
-      }
+      },
     );
 
     if (user.isLeft()) {
-      throw new Error(`Could not map user schema to entity: ${ user.value }`);
+      throw new Error(`Could not map user schema to entity: ${user.value}`);
     }
 
     return user.value;
@@ -29,6 +30,7 @@ export class TypeOrmUserMapper {
       name: entity.name.value,
       email: entity.email.value,
       password: entity.password,
+      role: entity.role,
     });
   }
 }

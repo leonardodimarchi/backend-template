@@ -5,11 +5,13 @@ import { Either, Left, Right } from '@shared/helpers/either';
 import { InvalidEmailError } from '../../errors/invalid-email.error';
 import { Name } from './value-objects/name';
 import { InvalidNameError } from '../../errors/invalid-name.error';
+import { UserRole } from './user-role.enum';
 
 export interface UserEntityProps {
   name: Name;
   email: Email;
   password: string;
+  role: UserRole;
 }
 
 export type UserEntityCreateProps = Replace<
@@ -23,15 +25,15 @@ export type UserEntityCreateProps = Replace<
 export class UserEntity extends BaseEntity<UserEntityProps> {
   private constructor(
     props: UserEntityProps,
-    baseEntityProps?: BaseEntityProps
+    baseEntityProps?: BaseEntityProps,
   ) {
     super(props, baseEntityProps);
     Object.freeze(this);
   }
 
   static create(
-    { name, email, password }: UserEntityCreateProps,
-    baseEntityProps?: BaseEntityProps
+    { name, email, password, role }: UserEntityCreateProps,
+    baseEntityProps?: BaseEntityProps,
   ): Either<InvalidEmailError | InvalidNameError, UserEntity> {
     const emailValue = Email.create(email);
     const nameValue = Name.create(name);
@@ -50,9 +52,10 @@ export class UserEntity extends BaseEntity<UserEntityProps> {
           name: nameValue.value,
           email: emailValue.value,
           password,
+          role,
         },
-        baseEntityProps
-      )
+        baseEntityProps,
+      ),
     );
   }
 
@@ -62,6 +65,10 @@ export class UserEntity extends BaseEntity<UserEntityProps> {
 
   get email(): Email {
     return this.props.email;
+  }
+
+  get role(): UserRole {
+    return this.props.role;
   }
 
   get password(): string {

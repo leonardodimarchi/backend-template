@@ -1,3 +1,4 @@
+import { UserRole } from '@modules/user/domain/entities/user/user-role.enum';
 import { UserEntity } from '@modules/user/domain/entities/user/user.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { BaseEntityViewModel } from '@shared/presenter/models/base-entity.view-model';
@@ -8,6 +9,7 @@ export class UserViewModel extends BaseEntityViewModel {
 
     this.email = entity.email.value;
     this.name = entity.name.value;
+    this.role = entity.role;
   }
 
   @ApiProperty({ example: 'john.doe@email.com' })
@@ -15,4 +17,7 @@ export class UserViewModel extends BaseEntityViewModel {
 
   @ApiProperty({ example: 'John Doe' })
   name: string;
+
+  @ApiProperty({ example: UserRole.STUDENT })
+  role: string;
 }

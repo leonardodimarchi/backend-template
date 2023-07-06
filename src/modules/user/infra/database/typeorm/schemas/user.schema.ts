@@ -1,5 +1,6 @@
-import { BaseSchema } from "@shared/infra/database/typeorm/base.schema";
-import { Column, Entity } from "typeorm";
+import { UserRole } from '@modules/user/domain/entities/user/user-role.enum';
+import { BaseSchema } from '@shared/infra/database/typeorm/base.schema';
+import { Column, Entity } from 'typeorm';
 
 @Entity('users')
 export class UserSchema extends BaseSchema {
@@ -11,4 +12,7 @@ export class UserSchema extends BaseSchema {
 
   @Column()
   password: string;
+
+  @Column({ type: 'varchar', default: UserRole.STUDENT })
+  role: UserRole;
 }

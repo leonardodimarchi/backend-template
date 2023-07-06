@@ -36,13 +36,13 @@ describe('CreateUserUseCase', () => {
 
     expect(result).toBeInstanceOf(Right);
     expect(
-      (result.value as CreateUserUseCaseOutput).createdUser.name.value
+      (result.value as CreateUserUseCaseOutput).createdUser.name.value,
     ).toBe('John Doe');
     expect(
-      (result.value as CreateUserUseCaseOutput).createdUser.email.value
+      (result.value as CreateUserUseCaseOutput).createdUser.email.value,
     ).toBe('john.doe@email.com');
     expect((result.value as CreateUserUseCaseOutput).createdUser.password).toBe(
-      encryptedPassword
+      encryptedPassword,
     );
   });
 

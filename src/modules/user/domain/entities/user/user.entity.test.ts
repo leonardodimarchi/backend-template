@@ -1,4 +1,5 @@
 import { Right } from '@shared/helpers/either';
+import { UserRole } from './user-role.enum';
 import { UserEntity } from './user.entity';
 
 describe('UserEntity', () => {
@@ -6,11 +7,13 @@ describe('UserEntity', () => {
     const name = 'User name';
     const email = 'user@email.com';
     const password = 'password';
+    const role = UserRole.STUDENT;
 
     const entity = UserEntity.create({
       name,
       email,
       password,
+      role,
     });
 
     expect(entity).toBeInstanceOf(Right);
@@ -18,5 +21,6 @@ describe('UserEntity', () => {
     expect((entity.value as UserEntity).name.value).toBe(name);
     expect((entity.value as UserEntity).email.value).toBe(email);
     expect((entity.value as UserEntity).password).toBe(password);
+    expect((entity.value as UserEntity).role).toBe(role);
   });
 });

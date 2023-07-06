@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker';
+import { UserRole } from '@modules/user/domain/entities/user/user-role.enum';
 import {
   UserEntity,
   UserEntityCreateProps,
@@ -26,6 +27,7 @@ export class MockUser {
         email: faker.internet.email(),
         name: faker.person.fullName(),
         password: faker.internet.password(),
+        role: UserRole.STUDENT,
         ...overrideProps,
       },
       {
@@ -33,17 +35,19 @@ export class MockUser {
         createdAt: faker.date.past(),
         updatedAt: faker.date.past(),
         ...entityPropsOverride,
-      }
+      },
     );
 
     if (user.isLeft()) {
-      throw new Error(`Mock user error: ${ user.value }`)
+      throw new Error(`Mock user error: ${user.value}`);
     }
 
     return user.value;
   }
 
-  static createViewModel(override: CreateMockUserOverrideProps = {}): UserViewModel {
+  static createViewModel(
+    override: CreateMockUserOverrideProps = {},
+  ): UserViewModel {
     const entity = MockUser.createEntity(override);
 
     return new UserViewModel(entity);
@@ -54,6 +58,6 @@ export class MockUser {
       email: faker.internet.email(),
       name: faker.person.fullName(),
       password: faker.internet.password(),
-    }
+    };
   }
 }
