@@ -15,7 +15,6 @@ export class UserSchema extends BaseSchema {
 
   @Column({
     type: 'simple-array',
-    enum: UserRole,
     default: [UserRole.STUDENT],
   })
   roles: UserRole[];
