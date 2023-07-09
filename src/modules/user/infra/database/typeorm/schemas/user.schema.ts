@@ -13,6 +13,10 @@ export class UserSchema extends BaseSchema {
   @Column()
   password: string;
 
-  @Column({ type: 'varchar', default: UserRole.STUDENT })
-  role: UserRole;
+  @Column({
+    type: 'simple-array',
+    enum: UserRole,
+    default: [UserRole.STUDENT],
+  })
+  roles: UserRole[];
 }

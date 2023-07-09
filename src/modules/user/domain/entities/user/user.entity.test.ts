@@ -7,13 +7,13 @@ describe('UserEntity', () => {
     const name = 'User name';
     const email = 'user@email.com';
     const password = 'password';
-    const role = UserRole.STUDENT;
+    const role = [UserRole.STUDENT];
 
     const entity = UserEntity.create({
       name,
       email,
       password,
-      role,
+      roles: role,
     });
 
     expect(entity).toBeInstanceOf(Right);
@@ -21,6 +21,6 @@ describe('UserEntity', () => {
     expect((entity.value as UserEntity).name.value).toBe(name);
     expect((entity.value as UserEntity).email.value).toBe(email);
     expect((entity.value as UserEntity).password).toBe(password);
-    expect((entity.value as UserEntity).role).toBe(role);
+    expect((entity.value as UserEntity).roles).toBe(role);
   });
 });

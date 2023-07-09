@@ -9,7 +9,7 @@ export class UserViewModel extends BaseEntityViewModel {
 
     this.email = entity.email.value;
     this.name = entity.name.value;
-    this.role = entity.role;
+    this.roles = entity.roles;
   }
 
   @ApiProperty({ example: 'john.doe@email.com' })
@@ -18,6 +18,6 @@ export class UserViewModel extends BaseEntityViewModel {
   @ApiProperty({ example: 'John Doe' })
   name: string;
 
-  @ApiProperty({ example: UserRole.STUDENT })
-  role: string;
+  @ApiProperty({ example: [UserRole.STUDENT] })
+  roles: string[];
 }

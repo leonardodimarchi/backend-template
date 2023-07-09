@@ -9,8 +9,9 @@ import { UUID } from 'crypto';
 export class TypeOrmUserRepository implements UserRepository {
   constructor(
     @InjectRepository(UserSchema)
-    private typeOrmRepository: Repository<UserSchema>
+    private typeOrmRepository: Repository<UserSchema>,
   ) {}
+
   async save(user: UserEntity): Promise<void> {
     await this.typeOrmRepository.save(TypeOrmUserMapper.toSchema(user));
   }
@@ -25,7 +26,7 @@ export class TypeOrmUserRepository implements UserRepository {
     const user = await this.typeOrmRepository.findOne({
       where: {
         id: userId,
-      }
+      },
     });
 
     if (!user) {

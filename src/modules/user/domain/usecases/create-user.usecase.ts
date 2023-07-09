@@ -47,7 +47,7 @@ export class CreateUserUseCase
       name,
       email,
       password,
-      role: UserRole.STUDENT,
+      roles: [UserRole.STUDENT],
     });
 
     if (user.isLeft()) {

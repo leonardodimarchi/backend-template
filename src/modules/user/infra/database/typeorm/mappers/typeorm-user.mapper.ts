@@ -8,7 +8,7 @@ export class TypeOrmUserMapper {
         name: schema.name,
         email: schema.email,
         password: schema.password,
-        role: schema.role,
+        roles: schema.roles,
       },
       {
         id: schema.id,
@@ -30,7 +30,7 @@ export class TypeOrmUserMapper {
       name: entity.name.value,
       email: entity.email.value,
       password: entity.password,
-      role: entity.role,
+      roles: entity.roles,
     });
   }
 }

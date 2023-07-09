@@ -11,7 +11,7 @@ export interface UserEntityProps {
   name: Name;
   email: Email;
   password: string;
-  role: UserRole;
+  roles: UserRole[];
 }
 
 export type UserEntityCreateProps = Replace<
@@ -32,7 +32,7 @@ export class UserEntity extends BaseEntity<UserEntityProps> {
   }
 
   static create(
-    { name, email, password, role }: UserEntityCreateProps,
+    { name, email, password, roles: role }: UserEntityCreateProps,
     baseEntityProps?: BaseEntityProps,
   ): Either<InvalidEmailError | InvalidNameError, UserEntity> {
     const emailValue = Email.create(email);
@@ -52,7 +52,7 @@ export class UserEntity extends BaseEntity<UserEntityProps> {
           name: nameValue.value,
           email: emailValue.value,
           password,
-          role,
+          roles: role,
         },
         baseEntityProps,
       ),
@@ -67,8 +67,8 @@ export class UserEntity extends BaseEntity<UserEntityProps> {
     return this.props.email;
   }
 
-  get role(): UserRole {
-    return this.props.role;
+  get roles(): UserRole[] {
+    return this.props.roles;
   }
 
   get password(): string {
