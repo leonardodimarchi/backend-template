@@ -25,4 +25,14 @@ export class InMemoryUserRepository
 
     return user;
   }
+
+  async getByEmail(email: string): Promise<UserEntity | null> {
+    const user = this.items.find((u) => u.email.value === email);
+
+    if (!user) {
+      return null;
+    }
+
+    return user;
+  }
 }
