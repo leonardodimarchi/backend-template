@@ -35,4 +35,18 @@ export class TypeOrmUserRepository implements UserRepository {
 
     return TypeOrmUserMapper.toEntity(user);
   }
+
+  async getByEmail(email: string): Promise<UserEntity | null> {
+    const user = await this.typeOrmRepository.findOne({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) {
+      return null;
+    }
+
+    return TypeOrmUserMapper.toEntity(user);
+  }
 }

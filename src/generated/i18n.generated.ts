@@ -2,6 +2,12 @@
 
 import { Path } from "nestjs-i18n";
 export type I18nTranslations = {
+    "auth": {
+        "errors": {
+            "user-not-found": string;
+            "incorrect-password": string;
+        };
+    };
     "course": {
         "validations": {
             "TITLE_IS_DEFINED": string;

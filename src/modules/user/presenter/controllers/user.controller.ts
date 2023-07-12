@@ -26,7 +26,10 @@ export class UserController {
   @ApiHeader({ name: 'Accept-Language', example: 'en', required: true })
   @ApiResponse({ status: HttpStatus.CREATED, type: UserViewModel })
   @Post()
-  async create(@Body() payload: CreateUserPayload, @I18n() i18n: I18nContext<I18nTranslations>): Promise<UserViewModel> {
+  async create(
+    @Body() payload: CreateUserPayload,
+    @I18n() i18n: I18nContext<I18nTranslations>,
+  ): Promise<UserViewModel> {
     const { email, name, password } = payload;
 
     const result = await this.createUserUseCase.exec({
@@ -40,12 +43,9 @@ export class UserController {
     }
 
     if (result.value instanceof DuplicatedEmailError) {
-      throw new ConflictException(
-        i18n.t('user.errors.duplicated-email'),
-        {
-          cause: result.value,
-        }
-      );
+      throw new ConflictException(i18n.t('user.errors.duplicated-email'), {
+        cause: result.value,
+      });
     }
 
     if (result.value instanceof InvalidEmailError) {

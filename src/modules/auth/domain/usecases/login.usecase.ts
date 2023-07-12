@@ -13,10 +13,10 @@ export interface LoginUseCaseInput {
 }
 
 export interface LoginUseCaseOutput {
-  user: UserEntity | null;
+  user: UserEntity;
 }
 
-export type LoginUseCaseErrors = InvalidEmailError;
+export type LoginUseCaseErrors = InvalidEmailError | IncorrectPasswordError;
 
 export class LoginUseCase
   implements UseCase<LoginUseCaseInput, LoginUseCaseOutput, LoginUseCaseErrors>
