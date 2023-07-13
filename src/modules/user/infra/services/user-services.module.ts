@@ -4,7 +4,10 @@ import { BcryptPasswordEncryptionService } from './password-encryption/bcrypt-pa
 
 @Module({
   providers: [
-    { provide: PasswordEncryptionService, useClass: BcryptPasswordEncryptionService }
+    {
+      provide: PasswordEncryptionService,
+      useClass: BcryptPasswordEncryptionService,
+    },
   ],
   exports: [PasswordEncryptionService],
 })

@@ -14,7 +14,7 @@ import { UserServiceModule } from './infra/services/user-services.module';
       provide: CreateUserUseCase,
       useFactory: (
         repository: UserRepository,
-        passwordEncryptionService: PasswordEncryptionService
+        passwordEncryptionService: PasswordEncryptionService,
       ) => {
         return new CreateUserUseCase(repository, passwordEncryptionService);
       },

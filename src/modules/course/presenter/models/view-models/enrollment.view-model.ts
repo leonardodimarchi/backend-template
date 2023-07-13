@@ -1,9 +1,8 @@
-
-import { EnrollmentEntity } from "@modules/course/domain/entities/enrollment/enrollment.entity";
-import { UserViewModel } from "@modules/user/presenter/models/view-models/user.view-model";
-import { ApiProperty } from "@nestjs/swagger";
-import { BaseEntityViewModel } from "@shared/presenter/models/base-entity.view-model";
-import { CourseViewModel } from "./course.view-model";
+import { EnrollmentEntity } from '@modules/course/domain/entities/enrollment/enrollment.entity';
+import { UserViewModel } from '@modules/user/presenter/models/view-models/user.view-model';
+import { ApiProperty } from '@nestjs/swagger';
+import { BaseEntityViewModel } from '@shared/presenter/models/base-entity.view-model';
+import { CourseViewModel } from './course.view-model';
 
 export class EnrollmentViewModel extends BaseEntityViewModel {
   constructor(entity: EnrollmentEntity) {

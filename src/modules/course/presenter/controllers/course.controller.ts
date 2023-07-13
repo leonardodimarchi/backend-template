@@ -8,7 +8,13 @@ import {
   NotFoundException,
   Post,
 } from '@nestjs/common';
-import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiHeader,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { I18n, I18nContext } from 'nestjs-i18n';
 import { I18nTranslations } from 'src/generated/i18n.generated';
 import { CreateCourseUseCase } from '@modules/course/domain/usecases/create-course.usecase';
@@ -33,6 +39,11 @@ export class CourseController {
 
   @ApiOperation({ summary: 'Creates a new course' })
   @ApiHeader({ name: 'Accept-Language', example: 'en', required: true })
+  @ApiBody({
+    required: true,
+    type: CreateCoursePayload,
+    description: 'Course information',
+  })
   @ApiResponse({ status: HttpStatus.CREATED, type: CourseViewModel })
   @Post()
   async create(

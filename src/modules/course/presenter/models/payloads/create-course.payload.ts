@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger'
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsDefined,
   IsNotEmpty,
@@ -6,10 +6,10 @@ import {
   IsString,
   IsUUID,
   Min,
-} from 'class-validator'
-import { UUID } from 'crypto'
-import { i18nValidationMessage } from 'nestjs-i18n'
-import { I18nTranslations } from 'src/generated/i18n.generated'
+} from 'class-validator';
+import { UUID } from 'crypto';
+import { i18nValidationMessage } from 'nestjs-i18n';
+import { I18nTranslations } from 'src/generated/i18n.generated';
 
 export class CreateCoursePayload {
   @ApiProperty({ example: 'Flutter with Clean Architecture and TDD' })
@@ -28,7 +28,7 @@ export class CreateCoursePayload {
       'course.validations.TITLE_IS_NOT_EMPTY',
     ),
   })
-  title: string
+  title: string;
 
   @ApiProperty({
     example:
@@ -49,7 +49,7 @@ export class CreateCoursePayload {
       'course.validations.DESCRIPTION_IS_NOT_EMPTY',
     ),
   })
-  description: string
+  description: string;
 
   @ApiProperty({ example: 49.99 })
   @IsDefined({
@@ -70,7 +70,7 @@ export class CreateCoursePayload {
       'course.validations.PRICE_MIN',
     ),
   })
-  price: number
+  price: number;
 
   @ApiProperty({ example: '<UUID>' })
   @IsDefined({
@@ -83,5 +83,5 @@ export class CreateCoursePayload {
       'course.validations.INSTRUCTOR_IS_UUID',
     ),
   })
-  instructorId: UUID
+  instructorId: UUID;
 }

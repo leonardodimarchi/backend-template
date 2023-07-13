@@ -1,7 +1,7 @@
-import { CourseEntity } from "@modules/course/domain/entities/course/course.entity";
-import { UserViewModel } from "@modules/user/presenter/models/view-models/user.view-model";
-import { ApiProperty } from "@nestjs/swagger";
-import { BaseEntityViewModel } from "@shared/presenter/models/base-entity.view-model";
+import { CourseEntity } from '@modules/course/domain/entities/course/course.entity';
+import { UserViewModel } from '@modules/user/presenter/models/view-models/user.view-model';
+import { ApiProperty } from '@nestjs/swagger';
+import { BaseEntityViewModel } from '@shared/presenter/models/base-entity.view-model';
 
 export class CourseViewModel extends BaseEntityViewModel {
   constructor(entity: CourseEntity) {
@@ -16,7 +16,10 @@ export class CourseViewModel extends BaseEntityViewModel {
   @ApiProperty({ example: 'Flutter with Clean Architecture and TDD' })
   title: string;
 
-  @ApiProperty({ example: 'Within this course, we will learn how to build good flutter applications' })
+  @ApiProperty({
+    example:
+      'Within this course, we will learn how to build good flutter applications',
+  })
   description: string;
 
   @ApiProperty({ example: 49.99 })
