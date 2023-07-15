@@ -7,6 +7,7 @@ import {
   HttpStatus,
   InternalServerErrorException,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { UserViewModel } from '../models/view-models/user.view-model';
 import { CreateUserPayload } from '../models/payloads/create-user.payload';
@@ -16,12 +17,14 @@ import { InvalidEmailError } from '@modules/user/domain/errors/invalid-email.err
 import { InvalidNameError } from '@modules/user/domain/errors/invalid-name.error';
 import { I18n, I18nContext } from 'nestjs-i18n';
 import { I18nTranslations } from 'src/generated/i18n.generated';
+import { AuthJwtGuard } from '@modules/auth/infra/guards/auth-jwt.guard';
 
 @ApiTags('Users')
 @Controller('users')
 export class UserController {
   constructor(private readonly createUserUseCase: CreateUserUseCase) {}
 
+  @UseGuards(AuthJwtGuard)
   @ApiOperation({ summary: 'Creates a new user' })
   @ApiHeader({ name: 'Accept-Language', example: 'en', required: true })
   @ApiResponse({ status: HttpStatus.CREATED, type: UserViewModel })

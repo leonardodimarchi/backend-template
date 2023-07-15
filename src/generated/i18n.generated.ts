@@ -7,6 +7,12 @@ export type I18nTranslations = {
             "user-not-found": string;
             "incorrect-password": string;
         };
+        "validations": {
+            "EMAIL_IS_DEFINED": string;
+            "EMAIL_IS_EMAIL": string;
+            "PASSWORD_IS_DEFINED": string;
+            "PASSWORD_IS_STRING": string;
+        };
     };
     "course": {
         "validations": {

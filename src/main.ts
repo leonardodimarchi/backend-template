@@ -12,6 +12,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Backend Template')
     .setDescription('This is a backend template for REST APIs')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

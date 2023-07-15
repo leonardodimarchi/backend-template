@@ -1,3 +1,4 @@
+import { AuthModule } from '@modules/auth/auth.module';
 import { CourseModule } from '@modules/course/course.module';
 import { UserModule } from '@modules/user/user.module';
 import { Module } from '@nestjs/common';
@@ -13,12 +14,13 @@ import * as path from 'path';
         path: path.join(__dirname, '/i18n/'),
         watch: true,
       },
-      resolvers: [
-        AcceptLanguageResolver,
-        QueryResolver,
-      ],
-      typesOutputPath: path.join(__dirname, '../src/generated/i18n.generated.ts'),
+      resolvers: [AcceptLanguageResolver, QueryResolver],
+      typesOutputPath: path.join(
+        __dirname,
+        '../src/generated/i18n.generated.ts',
+      ),
     }),
+    AuthModule,
     DatabaseModule,
     UserModule,
     CourseModule,
