@@ -40,3 +40,6 @@ This is where i'm going to place my ideas and things that i want to do or use in
 - [ ] Auth module with passport 
 - [ ] Validate request user permissions when calling a method (for example, an admin user cannot enroll at a course)
 - [x] Add base user roles such as Admin, Student and Instructor
+- [ ] Environment service
+- [ ] Add JWT Secret
+- [ ] Translate Auth error messages
