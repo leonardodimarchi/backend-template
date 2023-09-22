@@ -14,9 +14,7 @@ This project uses the following tools:
 
 - **ESLint**: a linter to analyze the code statically and identify potential errors or enforce coding conventions.
 
-- **Prettier**: code formatter that helps with the code formatting (after writing) in an opinionated and standardized way. Integrated within eslint.
-
-> On VSCode, we don't need prettier extension, just ESLint.
+- **Prettier**: code formatter that helps with the code formatting (after writing) in an opinionated and standardized way.
 
 ## TODOs
 
