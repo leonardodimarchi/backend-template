@@ -1,5 +1,7 @@
+import { RequestUserEntity } from '@modules/auth/domain/entities/request-user.entity';
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
+import { UUID } from 'crypto';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 @Injectable()
@@ -12,10 +14,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  public validate(payload: { sub: number; email: string }): {
-    id: number;
-    email: string;
-  } {
-    return { id: payload.sub, email: payload.email };
+  public validate(payload: { sub: UUID; email: string }): RequestUserEntity {
+    const entityResult = RequestUserEntity.create({
+      id: payload.sub,
+      email: payload.email,
+    });
+
+    return entityResult.value as RequestUserEntity;
   }
 }

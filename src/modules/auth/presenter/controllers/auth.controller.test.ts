@@ -1,16 +1,27 @@
+import { UserNotFoundError } from '@modules/auth/domain/errors/user-not-found.error';
+import { GetUserByIdUseCase } from '@modules/user/domain/usecases/get-user-by-id.usecase';
 import { UserViewModel } from '@modules/user/presenter/models/view-models/user.view-model';
+import {
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { Left, Right } from '@shared/helpers/either';
+import { MockRequestUser } from 'test/factories/mock-request-user';
 import { MockUser } from 'test/factories/mock-user';
+import { createI18nMock } from 'test/utils/create-i18n-mock';
 import { DeepMocked, createMock } from 'test/utils/create-mock';
 import { AuthController } from './auth.controller';
 
 describe('AuthController', () => {
   let controller: AuthController;
   let jwtService: DeepMocked<JwtService>;
+  let getUserByIdUseCase: DeepMocked<GetUserByIdUseCase>;
 
   beforeEach(() => {
     jwtService = createMock<JwtService>();
-    controller = new AuthController(jwtService);
+    getUserByIdUseCase = createMock<GetUserByIdUseCase>();
+    controller = new AuthController(jwtService, getUserByIdUseCase);
   });
 
   describe('login', () => {
@@ -36,13 +47,52 @@ describe('AuthController', () => {
   });
 
   describe('getProfile', () => {
-    it('should return the request user view-model', () => {
-      const requestUser = MockUser.createEntity();
-      const requestUserViewModel = new UserViewModel(requestUser);
+    it('should return the request user', async () => {
+      const requestUserEntity = MockRequestUser.createEntity();
 
-      const result = controller.getProfile(requestUser);
+      const userEntity = MockUser.createEntity({
+        override: {
+          email: requestUserEntity.email,
+        },
+        basePropsOverride: { id: requestUserEntity.id },
+      });
 
-      expect(result).toEqual(requestUserViewModel);
+      const userViewModel = new UserViewModel(userEntity);
+
+      getUserByIdUseCase.exec.mockResolvedValueOnce(
+        new Right({ user: userEntity }),
+      );
+
+      const result = await controller.getProfile(
+        requestUserEntity,
+        createI18nMock(),
+      );
+
+      expect(result).toEqual(userViewModel);
+    });
+
+    it('should throw a not found exception if the user was not found', async () => {
+      const requestUserEntity = MockRequestUser.createEntity();
+
+      getUserByIdUseCase.exec.mockResolvedValueOnce(
+        new Left(new UserNotFoundError(requestUserEntity.id)),
+      );
+
+      const call = async () =>
+        await controller.getProfile(requestUserEntity, createI18nMock());
+
+      expect(call).rejects.toThrow(NotFoundException);
+    });
+
+    it('should throw a internal server exception if there is some unknown error', async () => {
+      const requestUserEntity = MockRequestUser.createEntity();
+
+      getUserByIdUseCase.exec.mockResolvedValueOnce(new Left(new Error()));
+
+      const call = async () =>
+        await controller.getProfile(requestUserEntity, createI18nMock());
+
+      expect(call).rejects.toThrow(InternalServerErrorException);
     });
   });
 });

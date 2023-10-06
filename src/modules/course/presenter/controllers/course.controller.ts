@@ -1,3 +1,11 @@
+import { AuthJwtGuard } from '@modules/auth/infra/guards/auth-jwt.guard';
+import { CourseNotFoundError } from '@modules/course/domain/errors/course-not-found.error';
+import { InstructorNotFoundError } from '@modules/course/domain/errors/instructor-not-found.error';
+import { InvalidMoneyError } from '@modules/course/domain/errors/invalid-money.error';
+import { StudentAlreadyEnrolledError } from '@modules/course/domain/errors/student-already-enrolled.error';
+import { StudentNotFoundError } from '@modules/course/domain/errors/student-not-found.error';
+import { CreateCourseUseCase } from '@modules/course/domain/usecases/create-course.usecase';
+import { EnrollStudentInCourseUseCase } from '@modules/course/domain/usecases/enroll-student-in-course.usecase';
 import {
   BadRequestException,
   Body,
@@ -7,8 +15,10 @@ import {
   InternalServerErrorException,
   NotFoundException,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiHeader,
   ApiOperation,
@@ -17,17 +27,10 @@ import {
 } from '@nestjs/swagger';
 import { I18n, I18nContext } from 'nestjs-i18n';
 import { I18nTranslations } from 'src/generated/i18n.generated';
-import { CreateCourseUseCase } from '@modules/course/domain/usecases/create-course.usecase';
-import { CourseViewModel } from '../models/view-models/course.view-model';
 import { CreateCoursePayload } from '../models/payloads/create-course.payload';
-import { InvalidMoneyError } from '@modules/course/domain/errors/invalid-money.error';
-import { InstructorNotFoundError } from '@modules/course/domain/errors/instructor-not-found.error';
-import { EnrollmentViewModel } from '../models/view-models/enrollment.view-model';
 import { EnrollStudentPayload } from '../models/payloads/enroll-student.payload';
-import { EnrollStudentInCourseUseCase } from '@modules/course/domain/usecases/enroll-student-in-course.usecase';
-import { CourseNotFoundError } from '@modules/course/domain/errors/course-not-found.error';
-import { StudentNotFoundError } from '@modules/course/domain/errors/student-not-found.error';
-import { StudentAlreadyEnrolledError } from '@modules/course/domain/errors/student-already-enrolled.error';
+import { CourseViewModel } from '../models/view-models/course.view-model';
+import { EnrollmentViewModel } from '../models/view-models/enrollment.view-model';
 
 @ApiTags('Courses')
 @Controller('courses')
@@ -37,15 +40,17 @@ export class CourseController {
     private readonly enrollStudentInCourseUseCase: EnrollStudentInCourseUseCase,
   ) {}
 
+  @Post()
+  @UseGuards(AuthJwtGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Creates a new course' })
-  @ApiHeader({ name: 'Accept-Language', example: 'en', required: true })
+  @ApiHeader({ name: 'Accept-Language', example: 'en', required: false })
   @ApiBody({
     required: true,
     type: CreateCoursePayload,
     description: 'Course information',
   })
   @ApiResponse({ status: HttpStatus.CREATED, type: CourseViewModel })
-  @Post()
   async create(
     @Body() payload: CreateCoursePayload,
     @I18n() i18n: I18nContext<I18nTranslations>,
@@ -83,10 +88,12 @@ export class CourseController {
     throw new InternalServerErrorException();
   }
 
-  @ApiOperation({ summary: 'Enroll a student at a course' })
-  @ApiHeader({ name: 'Accept-Language', example: 'en', required: true })
-  @ApiResponse({ status: HttpStatus.CREATED, type: EnrollmentViewModel })
   @Post('enroll')
+  @UseGuards(AuthJwtGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Enroll a student at a course' })
+  @ApiHeader({ name: 'Accept-Language', example: 'en', required: false })
+  @ApiResponse({ status: HttpStatus.CREATED, type: EnrollmentViewModel })
   async enrollStudent(
     @Body() payload: EnrollStudentPayload,
     @I18n() i18n: I18nContext<I18nTranslations>,

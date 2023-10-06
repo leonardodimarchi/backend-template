@@ -6,6 +6,5 @@ coverage/
 .env
 postgres-data
 
-.vscode
 .idea
 .eslintcache
