@@ -45,7 +45,7 @@ export class TypeOrmCourseRepository implements CourseRepository {
     return {
       page: options.page,
       pageLimit: take,
-      totalPageCount: totalCount,
+      totalPageCount: Math.ceil(totalCount / take),
       entities: entities.map(TypeOrmCourseMapper.toEntity),
     };
   }

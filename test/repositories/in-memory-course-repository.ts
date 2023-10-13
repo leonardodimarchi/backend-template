@@ -1,7 +1,9 @@
-import { InMemoryRepository } from './in-memory-repository';
-import { CourseRepository } from '@modules/course/domain/repositories/course.repository';
 import { CourseEntity } from '@modules/course/domain/entities/course/course.entity';
+import { CourseRepository } from '@modules/course/domain/repositories/course.repository';
+import { PaginatedEntitiesOptions } from '@shared/infra/database/interfaces/paginated-entities-options.interface.';
+import { PaginatedEntities } from '@shared/infra/database/interfaces/paginated-entities.interface';
 import { UUID } from 'crypto';
+import { InMemoryRepository } from './in-memory-repository';
 
 export class InMemoryCourseRepository
   implements InMemoryRepository<CourseRepository, CourseEntity>
@@ -20,5 +22,22 @@ export class InMemoryCourseRepository
     }
 
     return course;
+  }
+
+  async getAllPaginated(
+    options: PaginatedEntitiesOptions,
+  ): Promise<PaginatedEntities<CourseEntity>> {
+    const take = options.pageLimit || 10;
+    const skip = (options.page - 1) * take;
+
+    const entities = this.items.slice(skip, skip + take);
+    const totalPageCount = Math.ceil(this.items.length / take);
+
+    return {
+      page: options.page,
+      pageLimit: take,
+      totalPageCount: totalPageCount,
+      entities,
+    };
   }
 }
