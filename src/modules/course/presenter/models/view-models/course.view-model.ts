@@ -1,7 +1,8 @@
 import { CourseEntity } from '@modules/course/domain/entities/course/course.entity';
 import { UserViewModel } from '@modules/user/presenter/models/view-models/user.view-model';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { BaseEntityViewModel } from '@shared/presenter/models/base-entity.view-model';
+import { UUID } from 'crypto';
 
 export class CourseViewModel extends BaseEntityViewModel {
   constructor(entity: CourseEntity) {
@@ -10,7 +11,10 @@ export class CourseViewModel extends BaseEntityViewModel {
     this.title = entity.title;
     this.description = entity.description;
     this.price = entity.price.amount;
-    this.instructor = new UserViewModel(entity.instructor);
+    this.instructorId = entity.instructorId;
+
+    if (entity.instructor)
+      this.instructor = new UserViewModel(entity.instructor);
   }
 
   @ApiProperty({ example: 'Flutter with Clean Architecture and TDD' })
@@ -25,6 +29,9 @@ export class CourseViewModel extends BaseEntityViewModel {
   @ApiProperty({ example: 49.99 })
   price: number;
 
-  @ApiProperty({ type: () => UserViewModel })
-  instructor: UserViewModel;
+  @ApiProperty()
+  instructorId: UUID;
+
+  @ApiPropertyOptional({ type: () => UserViewModel })
+  instructor?: UserViewModel;
 }

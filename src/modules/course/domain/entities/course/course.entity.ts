@@ -1,15 +1,17 @@
-import { BaseEntity, BaseEntityProps } from '@shared/domain/base.entity';
-import { Replace } from '@shared/helpers/replace';
-import { Either, Left, Right } from '@shared/helpers/either';
 import { UserEntity } from '@modules/user/domain/entities/user/user.entity';
-import { Money } from './value-objects/money';
+import { BaseEntity, BaseEntityProps } from '@shared/domain/base.entity';
+import { Either, Left, Right } from '@shared/helpers/either';
+import { Replace } from '@shared/helpers/replace';
+import { UUID } from 'crypto';
 import { InvalidMoneyError } from '../../errors/invalid-money.error';
+import { Money } from './value-objects/money';
 
 export interface CourseEntityProps {
   title: string;
   description: string;
   price: Money;
-  instructor: UserEntity;
+  instructorId: UUID;
+  instructor?: UserEntity;
 }
 
 export type CourseEntityCreateProps = Replace<
@@ -22,15 +24,21 @@ export type CourseEntityCreateProps = Replace<
 export class CourseEntity extends BaseEntity<CourseEntityProps> {
   private constructor(
     props: CourseEntityProps,
-    baseEntityProps?: BaseEntityProps
+    baseEntityProps?: BaseEntityProps,
   ) {
     super(props, baseEntityProps);
     Object.freeze(this);
   }
 
   static create(
-    { title, description, price, instructor }: CourseEntityCreateProps,
-    baseEntityProps?: BaseEntityProps
+    {
+      title,
+      description,
+      price,
+      instructorId,
+      instructor,
+    }: CourseEntityCreateProps,
+    baseEntityProps?: BaseEntityProps,
   ): Either<InvalidMoneyError, CourseEntity> {
     const priceValue = Money.create(price);
 
@@ -44,10 +52,11 @@ export class CourseEntity extends BaseEntity<CourseEntityProps> {
           title,
           description,
           price: priceValue.value,
+          instructorId,
           instructor,
         },
-        baseEntityProps
-      )
+        baseEntityProps,
+      ),
     );
   }
 
@@ -75,11 +84,11 @@ export class CourseEntity extends BaseEntity<CourseEntityProps> {
     this.props.price = price;
   }
 
-  public get instructor(): UserEntity {
-    return this.props.instructor;
+  public get instructorId(): UUID {
+    return this.props.instructorId;
   }
 
-  public set instructor(instructor: UserEntity) {
-    this.props.instructor = instructor;
+  public get instructor(): UserEntity | null {
+    return this.props.instructor || null;
   }
 }

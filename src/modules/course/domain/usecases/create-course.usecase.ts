@@ -1,11 +1,11 @@
+import { UserRepository } from '@modules/user/domain/repositories/user.repository';
 import { UseCase } from '@shared/domain/usecase';
-import { CourseEntity } from '../entities/course/course.entity';
 import { Either, Left, Right } from '@shared/helpers/either';
+import { UUID } from 'crypto';
+import { CourseEntity } from '../entities/course/course.entity';
+import { InstructorNotFoundError } from '../errors/instructor-not-found.error';
 import { InvalidMoneyError } from '../errors/invalid-money.error';
 import { CourseRepository } from '../repositories/course.repository';
-import { UUID } from 'crypto';
-import { UserRepository } from '@modules/user/domain/repositories/user.repository';
-import { InstructorNotFoundError } from '../errors/instructor-not-found.error';
 
 export interface CreateCourseUseCaseInput {
   title: string;
@@ -18,7 +18,9 @@ export interface CreateCourseUseCaseOutput {
   createdCourse: CourseEntity;
 }
 
-export type CreateCourseUseCaseErrors = InvalidMoneyError | InstructorNotFoundError;
+export type CreateCourseUseCaseErrors =
+  | InvalidMoneyError
+  | InstructorNotFoundError;
 
 export class CreateCourseUseCase
   implements
@@ -30,7 +32,7 @@ export class CreateCourseUseCase
 {
   constructor(
     private readonly repository: CourseRepository,
-    private readonly userRepository: UserRepository
+    private readonly userRepository: UserRepository,
   ) {}
 
   async exec({
@@ -51,7 +53,7 @@ export class CreateCourseUseCase
       title,
       description,
       price,
-      instructor,
+      instructorId,
     });
 
     if (courseResult.isLeft()) {

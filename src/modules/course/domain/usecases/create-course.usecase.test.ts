@@ -1,18 +1,18 @@
 import { faker } from '@faker-js/faker';
+import { UserEntity } from '@modules/user/domain/entities/user/user.entity';
+import { UserRepository } from '@modules/user/domain/repositories/user.repository';
+import { UUID } from 'crypto';
+import { MockUser } from 'test/factories/mock-user';
+import { InMemoryCourseRepository } from 'test/repositories/in-memory-course-repository';
+import { InMemoryRepository } from 'test/repositories/in-memory-repository';
+import { InMemoryUserRepository } from 'test/repositories/in-memory-user-repository';
+import { CourseEntity } from '../entities/course/course.entity';
+import { InstructorNotFoundError } from '../errors/instructor-not-found.error';
+import { CourseRepository } from '../repositories/course.repository';
 import {
   CreateCourseUseCase,
   CreateCourseUseCaseOutput,
 } from './create-course.usecase';
-import { CourseEntity } from '../entities/course/course.entity';
-import { InMemoryRepository } from 'test/repositories/in-memory-repository';
-import { CourseRepository } from '../repositories/course.repository';
-import { InMemoryCourseRepository } from 'test/repositories/in-memory-course-repository';
-import { InstructorNotFoundError } from '../errors/instructor-not-found.error';
-import { UserRepository } from '@modules/user/domain/repositories/user.repository';
-import { UserEntity } from '@modules/user/domain/entities/user/user.entity';
-import { InMemoryUserRepository } from 'test/repositories/in-memory-user-repository';
-import { UUID } from 'crypto';
-import { MockUser } from 'test/factories/mock-user';
 
 describe('CreateCourseUseCase', () => {
   let usecase: CreateCourseUseCase;
@@ -27,7 +27,7 @@ describe('CreateCourseUseCase', () => {
 
   const createInstructorWithId = (instructorId: UUID) => {
     userRepository.save(
-      MockUser.createEntity({ basePropsOverride: { id: instructorId } })
+      MockUser.createEntity({ basePropsOverride: { id: instructorId } }),
     );
   };
 
@@ -44,7 +44,7 @@ describe('CreateCourseUseCase', () => {
 
     expect(result.isRight()).toBeTruthy();
     expect(
-      (result.value as CreateCourseUseCaseOutput).createdCourse
+      (result.value as CreateCourseUseCaseOutput).createdCourse,
     ).toBeInstanceOf(CourseEntity);
   });
 
@@ -60,7 +60,7 @@ describe('CreateCourseUseCase', () => {
     });
 
     expect(
-      (result.value as CreateCourseUseCaseOutput).createdCourse.instructor.id
+      (result.value as CreateCourseUseCaseOutput).createdCourse.instructorId,
     ).toEqual(instructorId);
   });
 

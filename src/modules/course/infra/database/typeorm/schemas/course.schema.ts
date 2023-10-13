@@ -1,6 +1,7 @@
-import { UserSchema } from "@modules/user/infra/database/typeorm/schemas/user.schema";
-import { BaseSchema } from "@shared/infra/database/typeorm/base.schema";
-import { Column, Entity, ManyToOne } from "typeorm";
+import { UserSchema } from '@modules/user/infra/database/typeorm/schemas/user.schema';
+import { BaseSchema } from '@shared/infra/database/typeorm/base.schema';
+import { UUID } from 'crypto';
+import { Column, Entity, ManyToOne, Relation } from 'typeorm';
 
 @Entity('courses')
 export class CourseSchema extends BaseSchema {
@@ -13,6 +14,9 @@ export class CourseSchema extends BaseSchema {
   @Column({ type: 'decimal' })
   price: number;
 
+  @Column()
+  instructorId: UUID;
+
   @ManyToOne(() => UserSchema, { eager: true })
-  instructor: UserSchema;
+  instructor?: Relation<UserSchema>;
 }
