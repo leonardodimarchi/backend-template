@@ -1,15 +1,17 @@
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { UUID } from 'crypto';
-import { CourseRepository } from '@modules/course/domain/repositories/course.repository';
-import { CourseSchema } from '../schemas/course.schema';
 import { CourseEntity } from '@modules/course/domain/entities/course/course.entity';
+import { CourseRepository } from '@modules/course/domain/repositories/course.repository';
+import { InjectRepository } from '@nestjs/typeorm';
+import { PaginatedEntitiesOptions } from '@shared/infra/database/interfaces/paginated-entities-options.interface.';
+import { PaginatedEntities } from '@shared/infra/database/interfaces/paginated-entities.interface';
+import { UUID } from 'crypto';
+import { Repository } from 'typeorm';
 import { TypeOrmCourseMapper } from '../mappers/typeorm-course.mapper';
+import { CourseSchema } from '../schemas/course.schema';
 
 export class TypeOrmCourseRepository implements CourseRepository {
   constructor(
     @InjectRepository(CourseSchema)
-    private typeOrmRepository: Repository<CourseSchema>
+    private typeOrmRepository: Repository<CourseSchema>,
   ) {}
   async save(course: CourseEntity): Promise<void> {
     await this.typeOrmRepository.save(TypeOrmCourseMapper.toSchema(course));
@@ -19,7 +21,7 @@ export class TypeOrmCourseRepository implements CourseRepository {
     const course = await this.typeOrmRepository.findOne({
       where: {
         id,
-      }
+      },
     });
 
     if (!course) {
@@ -27,5 +29,24 @@ export class TypeOrmCourseRepository implements CourseRepository {
     }
 
     return TypeOrmCourseMapper.toEntity(course);
+  }
+
+  async getAllPaginated(
+    options: PaginatedEntitiesOptions,
+  ): Promise<PaginatedEntities<CourseEntity>> {
+    const take = options.pageLimit || 10;
+    const skip = (options.page - 1) * take;
+
+    const [entities, totalCount] = await this.typeOrmRepository.findAndCount({
+      skip,
+      take,
+    });
+
+    return {
+      page: options.page,
+      pageLimit: take,
+      totalPageCount: totalCount,
+      entities: entities.map(TypeOrmCourseMapper.toEntity),
+    };
   }
 }
