@@ -1,28 +1,28 @@
-import { UseCase } from '@shared/domain/usecase'
-import { Either, Left, Right } from '@shared/helpers/either'
-import { UUID } from 'crypto'
-import { EnrollmentRepository } from '../repositories/enrollment.repository'
-import { EnrollmentEntity } from '../entities/enrollment/enrollment.entity'
-import { UserRepository } from '@modules/user/domain/repositories/user.repository'
-import { StudentNotFoundError } from '../errors/student-not-found.error'
-import { CourseRepository } from '../repositories/course.repository'
-import { CourseNotFoundError } from '../errors/course-not-found.error'
-import { StudentAlreadyEnrolledError } from '../errors/student-already-enrolled.error'
+import { UserRepository } from '@modules/user/domain/repositories/user.repository';
+import { UseCase } from '@shared/domain/usecase';
+import { Either, Left, Right } from '@shared/helpers/either';
+import { UUID } from 'crypto';
+import { EnrollmentEntity } from '../entities/enrollment/enrollment.entity';
+import { CourseNotFoundError } from '../errors/course-not-found.error';
+import { StudentAlreadyEnrolledError } from '../errors/student-already-enrolled.error';
+import { StudentNotFoundError } from '../errors/student-not-found.error';
+import { CourseRepository } from '../repositories/course.repository';
+import { EnrollmentRepository } from '../repositories/enrollment.repository';
 
 export interface EnrollStudentInCourseUseCaseInput {
-  studentId: UUID
-  courseId: UUID
+  studentId: UUID;
+  courseId: UUID;
 }
 
 export interface EnrollStudentInCourseUseCaseOutput {
-  createdEnrollment: EnrollmentEntity
+  createdEnrollment: EnrollmentEntity;
 }
 
 export type EnrollStudentInCourseUseCaseErrors =
   | CourseNotFoundError
   | StudentNotFoundError
   | StudentAlreadyEnrolledError
-  | Error
+  | Error;
 
 export class EnrollStudentInCourseUseCase
   implements
@@ -47,37 +47,37 @@ export class EnrollStudentInCourseUseCase
       EnrollStudentInCourseUseCaseOutput
     >
   > {
-    const course = await this.courseRepository.getById(courseId)
+    const course = await this.courseRepository.getById(courseId);
 
     if (!course) {
-      return new Left(new CourseNotFoundError(courseId))
+      return new Left(new CourseNotFoundError(courseId));
     }
 
-    const student = await this.userRepository.getById(studentId)
+    const student = await this.userRepository.getById(studentId);
 
     if (!student) {
-      return new Left(new StudentNotFoundError(studentId))
+      return new Left(new StudentNotFoundError(studentId));
     }
 
     const enrollmentAlreadyExists = await this.enrollmentRepository
       .getByStudentAndCourse(studentId, courseId)
-      .then((r) => !!r)
+      .then((r) => !!r);
 
     if (enrollmentAlreadyExists) {
-      return new Left(new StudentAlreadyEnrolledError(studentId, courseId))
+      return new Left(new StudentAlreadyEnrolledError(studentId, courseId));
     }
 
     const enrollment = EnrollmentEntity.create({
-      course,
-      student,
-    })
+      courseId,
+      studentId,
+    });
 
     if (enrollment.isLeft()) {
-      return new Left(enrollment.value)
+      return new Left(enrollment.value);
     }
 
-    this.enrollmentRepository.save(enrollment.value)
+    this.enrollmentRepository.save(enrollment.value);
 
-    return new Right({ createdEnrollment: enrollment.value })
+    return new Right({ createdEnrollment: enrollment.value });
   }
 }

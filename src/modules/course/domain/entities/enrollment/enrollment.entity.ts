@@ -1,45 +1,61 @@
-import { BaseEntity, BaseEntityProps } from '@shared/domain/base.entity';
-import { Replace } from '@shared/helpers/replace';
-import { Either, Right } from '@shared/helpers/either';
 import { UserEntity } from '@modules/user/domain/entities/user/user.entity';
+import { BaseEntity, BaseEntityProps } from '@shared/domain/base.entity';
+import { Either, Right } from '@shared/helpers/either';
+import { Replace } from '@shared/helpers/replace';
+import { UUID } from 'crypto';
 import { CourseEntity } from '../course/course.entity';
 
 export interface EnrollmentEntityProps {
-  student: UserEntity;
-  course: CourseEntity;
+  studentId: UUID;
+  courseId: UUID;
+  student?: UserEntity;
+  course?: CourseEntity;
 }
 
-export type EnrollmentEntityCreateProps = Replace<EnrollmentEntityProps, {}>;
+export type EnrollmentEntityCreateProps = Replace<
+  EnrollmentEntityProps,
+  unknown
+>;
 
 export class EnrollmentEntity extends BaseEntity<EnrollmentEntityProps> {
   private constructor(
     props: EnrollmentEntityProps,
-    baseEntityProps?: BaseEntityProps
+    baseEntityProps?: BaseEntityProps,
   ) {
     super(props, baseEntityProps);
     Object.freeze(this);
   }
 
   static create(
-    { student, course }: EnrollmentEntityCreateProps,
-    baseEntityProps?: BaseEntityProps
+    { studentId, courseId, student, course }: EnrollmentEntityCreateProps,
+    baseEntityProps?: BaseEntityProps,
   ): Either<Error, EnrollmentEntity> {
     return new Right(
       new EnrollmentEntity(
         {
+          studentId,
+          courseId,
           student,
           course,
         },
-        baseEntityProps
-      )
+        baseEntityProps,
+      ),
     );
   }
 
-  public get student(): UserEntity {
-    return this.props.student;
+  public get studentId(): UUID {
+    return this.props.studentId;
   }
 
-  public get course(): CourseEntity {
-    return this.props.course;
+  public get courseId(): UUID {
+    return this.props.courseId;
+  }
+
+  public get student(): UserEntity | null {
+    return this.props.student || null;
+  }
+
+  public get course(): CourseEntity | null {
+    return this.props.course || null;
   }
 }
