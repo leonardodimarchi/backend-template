@@ -1,4 +1,5 @@
 import { AuthJwtGuard } from '@modules/auth/infra/guards/auth-jwt.guard';
+import { CourseEntity } from '@modules/course/domain/entities/course/course.entity';
 import { CourseNotFoundError } from '@modules/course/domain/errors/course-not-found.error';
 import { InstructorNotFoundError } from '@modules/course/domain/errors/instructor-not-found.error';
 import { InvalidMoneyError } from '@modules/course/domain/errors/invalid-money.error';
@@ -6,15 +7,18 @@ import { StudentAlreadyEnrolledError } from '@modules/course/domain/errors/stude
 import { StudentNotFoundError } from '@modules/course/domain/errors/student-not-found.error';
 import { CreateCourseUseCase } from '@modules/course/domain/usecases/create-course.usecase';
 import { EnrollStudentInCourseUseCase } from '@modules/course/domain/usecases/enroll-student-in-course.usecase';
+import { GetAllCoursesUseCase } from '@modules/course/domain/usecases/get-all-courses.usecase';
 import {
   BadRequestException,
   Body,
   ConflictException,
   Controller,
+  Get,
   HttpStatus,
   InternalServerErrorException,
   NotFoundException,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -22,9 +26,12 @@ import {
   ApiBody,
   ApiHeader,
   ApiOperation,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { PaginatedQueryParams } from '@shared/presenter/models/paginated-query-params';
+import { PaginatedViewModel } from '@shared/presenter/models/paginated.view-model.';
 import { I18n, I18nContext } from 'nestjs-i18n';
 import { I18nTranslations } from 'src/generated/i18n.generated';
 import { CreateCoursePayload } from '../models/payloads/create-course.payload';
@@ -38,7 +45,42 @@ export class CourseController {
   constructor(
     private readonly createCourseUseCase: CreateCourseUseCase,
     private readonly enrollStudentInCourseUseCase: EnrollStudentInCourseUseCase,
+    private readonly getAllCoursesUseCase: GetAllCoursesUseCase,
   ) {}
+
+  @Get()
+  @UseGuards(AuthJwtGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get all courses (paginated)' })
+  @ApiHeader({ name: 'Accept-Language', example: 'en', required: false })
+  @ApiQuery({
+    type: PaginatedQueryParams,
+    required: true,
+    description: 'Pagination options',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: PaginatedViewModel<CourseEntity, CourseViewModel>,
+  })
+  async getAll(
+    @Query() queryParams: PaginatedQueryParams,
+  ): Promise<PaginatedViewModel<CourseEntity, CourseViewModel>> {
+    const result = await this.getAllCoursesUseCase.exec({
+      paginationOptions: {
+        page: queryParams.page,
+        pageLimit: queryParams.pageLimit,
+      },
+    });
+
+    if (result.isRight()) {
+      return new PaginatedViewModel(
+        result.value.paginatedCourses,
+        CourseViewModel,
+      );
+    }
+
+    throw new InternalServerErrorException();
+  }
 
   @Post()
   @UseGuards(AuthJwtGuard)

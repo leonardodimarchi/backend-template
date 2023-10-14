@@ -1,4 +1,4 @@
 export interface PaginatedEntitiesOptions {
-  page: number;
+  page?: number;
   pageLimit?: number;
 }

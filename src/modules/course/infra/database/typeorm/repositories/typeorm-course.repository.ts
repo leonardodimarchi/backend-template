@@ -34,8 +34,9 @@ export class TypeOrmCourseRepository implements CourseRepository {
   async getAllPaginated(
     options: PaginatedEntitiesOptions,
   ): Promise<PaginatedEntities<CourseEntity>> {
+    const page = options.page || 1;
     const take = options.pageLimit || 10;
-    const skip = (options.page - 1) * take;
+    const skip = (page - 1) * take;
 
     const [entities, totalCount] = await this.typeOrmRepository.findAndCount({
       skip,
@@ -43,7 +44,7 @@ export class TypeOrmCourseRepository implements CourseRepository {
     });
 
     return {
-      page: options.page,
+      page,
       pageLimit: take,
       totalPageCount: Math.ceil(totalCount / take),
       entities: entities.map(TypeOrmCourseMapper.toEntity),

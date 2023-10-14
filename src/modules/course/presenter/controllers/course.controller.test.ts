@@ -1,44 +1,116 @@
-import { DeepMocked, createMock } from 'test/utils/create-mock';
-import { Left, Right } from '@shared/helpers/either';
-import { createI18nMock } from 'test/utils/create-i18n-mock';
-import { CourseController } from './course.controller';
+import { faker } from '@faker-js/faker';
+import { CourseEntity } from '@modules/course/domain/entities/course/course.entity';
+import { CurrencyCode } from '@modules/course/domain/entities/course/value-objects/money';
+import { CourseNotFoundError } from '@modules/course/domain/errors/course-not-found.error';
+import { InstructorNotFoundError } from '@modules/course/domain/errors/instructor-not-found.error';
+import { InvalidMoneyError } from '@modules/course/domain/errors/invalid-money.error';
+import { StudentAlreadyEnrolledError } from '@modules/course/domain/errors/student-already-enrolled.error';
+import { StudentNotFoundError } from '@modules/course/domain/errors/student-not-found.error';
 import {
   CreateCourseUseCase,
   CreateCourseUseCaseInput,
 } from '@modules/course/domain/usecases/create-course.usecase';
-import { MockCourse } from 'test/factories/mock-course';
-import { CourseViewModel } from '../models/view-models/course.view-model';
-import { InvalidMoneyError } from '@modules/course/domain/errors/invalid-money.error';
-import { faker } from '@faker-js/faker';
-import { CurrencyCode } from '@modules/course/domain/entities/course/value-objects/money';
-import {
-  BadRequestException,
-  ConflictException,
-  NotFoundException,
-} from '@nestjs/common';
-import { InstructorNotFoundError } from '@modules/course/domain/errors/instructor-not-found.error';
-import { MockEnrollment } from 'test/factories/mock-enrollment';
-import { EnrollmentViewModel } from '../models/view-models/enrollment.view-model';
 import {
   EnrollStudentInCourseUseCase,
   EnrollStudentInCourseUseCaseInput,
 } from '@modules/course/domain/usecases/enroll-student-in-course.usecase';
-import { CourseNotFoundError } from '@modules/course/domain/errors/course-not-found.error';
-import { StudentNotFoundError } from '@modules/course/domain/errors/student-not-found.error';
-import { StudentAlreadyEnrolledError } from '@modules/course/domain/errors/student-already-enrolled.error';
+import {
+  GetAllCoursesUseCase,
+  GetAllCoursesUseCaseInput,
+} from '@modules/course/domain/usecases/get-all-courses.usecase';
+import {
+  BadRequestException,
+  ConflictException,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
+import { Left, Right } from '@shared/helpers/either';
+import { PaginatedEntities } from '@shared/infra/database/interfaces/paginated-entities.interface';
+import { PaginatedViewModel } from '@shared/presenter/models/paginated.view-model.';
+import { MockCourse } from 'test/factories/mock-course';
+import { MockEnrollment } from 'test/factories/mock-enrollment';
+import { createI18nMock } from 'test/utils/create-i18n-mock';
+import { DeepMocked, createMock } from 'test/utils/create-mock';
+import { CourseViewModel } from '../models/view-models/course.view-model';
+import { EnrollmentViewModel } from '../models/view-models/enrollment.view-model';
+import { CourseController } from './course.controller';
 
 describe('CourseController', () => {
   let controller: CourseController;
   let createCourseUseCase: DeepMocked<CreateCourseUseCase>;
   let enrollStudentInCourseUseCase: DeepMocked<EnrollStudentInCourseUseCase>;
+  let getAllCoursesUseCase: DeepMocked<GetAllCoursesUseCase>;
 
   beforeEach(() => {
     createCourseUseCase = createMock<CreateCourseUseCase>();
     enrollStudentInCourseUseCase = createMock<EnrollStudentInCourseUseCase>();
+    getAllCoursesUseCase = createMock<GetAllCoursesUseCase>();
     controller = new CourseController(
       createCourseUseCase,
       enrollStudentInCourseUseCase,
+      getAllCoursesUseCase,
     );
+  });
+
+  describe('getAll', () => {
+    it('should return an paginated course view model', async () => {
+      const items: PaginatedEntities<CourseEntity> = {
+        page: 1,
+        pageLimit: 5,
+        totalPageCount: 2,
+        entities: [
+          MockCourse.createEntity(),
+          MockCourse.createEntity(),
+          MockCourse.createEntity(),
+          MockCourse.createEntity(),
+          MockCourse.createEntity(),
+        ],
+      };
+      const expectedResult = new PaginatedViewModel(items, CourseViewModel);
+
+      getAllCoursesUseCase.exec.mockResolvedValueOnce(
+        new Right({ paginatedCourses: items }),
+      );
+
+      const result = await controller.getAll({ page: 1, pageLimit: 5 });
+
+      expect(result).toBeInstanceOf(PaginatedViewModel);
+      expect(result).toEqual(expectedResult);
+    });
+
+    it('should call the usecase with the correct params', async () => {
+      const items: PaginatedEntities<CourseEntity> = {
+        page: 1,
+        pageLimit: 5,
+        totalPageCount: 1,
+        entities: [MockCourse.createEntity()],
+      };
+
+      getAllCoursesUseCase.exec.mockResolvedValueOnce(
+        new Right({ paginatedCourses: items }),
+      );
+
+      await controller.getAll({ page: 1, pageLimit: 5 });
+
+      expect(getAllCoursesUseCase.exec).toHaveBeenCalledTimes(1);
+      expect(getAllCoursesUseCase.exec).toHaveBeenCalledWith<
+        [GetAllCoursesUseCaseInput]
+      >({
+        paginationOptions: {
+          page: 1,
+          pageLimit: 5,
+        },
+      });
+    });
+
+    it('should throw a 500 http exception when receiving an unknown error', async () => {
+      getAllCoursesUseCase.exec.mockResolvedValueOnce(new Left(new Error()));
+
+      const call = async () =>
+        await controller.getAll({ page: 1, pageLimit: 5 });
+
+      expect(call).rejects.toThrow(InternalServerErrorException);
+    });
   });
 
   describe('create', () => {
