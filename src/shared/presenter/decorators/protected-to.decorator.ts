@@ -1,4 +1,4 @@
-// protected-to.decorator.ts
+import { AuthJwtGuard } from '@modules/auth/infra/guards/auth-jwt.guard';
 import { UserRole } from '@modules/user/domain/entities/user/user-role.enum';
 import {
   applyDecorators,
@@ -6,17 +6,17 @@ import {
   SetMetadata,
   UseGuards,
 } from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiForbiddenResponse,
-  ApiUnauthorizedResponse,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiForbiddenResponse } from '@nestjs/swagger';
 import { RolesGuard } from '../guards/role.guard';
 
 export const ProtectedTo = (...roles: UserRole[]) =>
   applyDecorators(
     SetMetadata('roles', roles),
-    UseGuards(RolesGuard),
+    UseGuards(AuthJwtGuard, RolesGuard),
     ApiBearerAuth(),
-    ApiForbiddenResponse({ type: ForbiddenException }),
+    ApiForbiddenResponse({
+      type: ForbiddenException,
+      status: 403,
+      description: 'Você não possui autorização para acessar esse recurso.',
+    }),
   );

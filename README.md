@@ -41,4 +41,5 @@ This is where i'm going to place my ideas and things that i want to do or use in
 - [ ] Environment service
 - [ ] Add JWT Secret
 - [ ] Translate Auth error messages
+- [ ] Translate role guard error messages
 - [x] SWC

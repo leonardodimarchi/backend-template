@@ -52,6 +52,7 @@ export class AuthController {
     const accessToken = await this.jwtService.signAsync({
       email: requestUser.email.value,
       sub: requestUser.id,
+      roles: requestUser.roles,
     });
 
     return {

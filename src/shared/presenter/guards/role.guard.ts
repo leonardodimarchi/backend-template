@@ -1,4 +1,4 @@
-// roles.guard.ts
+import { RequestUserEntity } from '@modules/auth/domain/entities/request-user.entity';
 import { UserRole } from '@modules/user/domain/entities/user/user-role.enum';
 import {
   CanActivate,
@@ -16,24 +16,24 @@ export class RolesGuard implements CanActivate {
     const roles = this.reflector.get<UserRole[]>('roles', context.getHandler());
 
     if (!roles) {
-      return true; // No specific roles required, so access is granted.
+      return true;
     }
 
     const request = context.switchToHttp().getRequest();
-    const user = request.user; // Assuming you have user information in your request object.
+    const user = request.user as RequestUserEntity;
 
-    if (!user || !user.role) {
+    if (!user || !user.roles) {
       throw new ForbiddenException(
         'Você não possui autorização para acessar esse recurso.',
-      ); // Access is denied if user or role is not defined.
+      );
     }
 
-    if (!roles.includes(user.role)) {
+    if (!roles.some((role) => user.roles.includes(role))) {
       throw new ForbiddenException(
         'Você não possui autorização para acessar esse recurso.',
-      ); // Access is denied if the user's role doesn't match the allowed roles.
+      );
     }
 
-    return true; // Access is granted if the user's role matches the allowed roles.
+    return true;
   }
 }

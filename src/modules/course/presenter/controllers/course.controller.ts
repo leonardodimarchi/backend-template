@@ -8,6 +8,7 @@ import { StudentNotFoundError } from '@modules/course/domain/errors/student-not-
 import { CreateCourseUseCase } from '@modules/course/domain/usecases/create-course.usecase';
 import { EnrollStudentInCourseUseCase } from '@modules/course/domain/usecases/enroll-student-in-course.usecase';
 import { GetAllCoursesUseCase } from '@modules/course/domain/usecases/get-all-courses.usecase';
+import { UserRole } from '@modules/user/domain/entities/user/user-role.enum';
 import {
   BadRequestException,
   Body,
@@ -30,6 +31,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { ProtectedTo } from '@shared/presenter/decorators/protected-to.decorator';
 import { PaginatedQueryParams } from '@shared/presenter/models/paginated-query-params';
 import { PaginatedViewModel } from '@shared/presenter/models/paginated.view-model.';
 import { I18n, I18nContext } from 'nestjs-i18n';
@@ -49,8 +51,7 @@ export class CourseController {
   ) {}
 
   @Get()
-  @UseGuards(AuthJwtGuard)
-  @ApiBearerAuth()
+  @ProtectedTo(UserRole.ADMIN, UserRole.INSTRUCTOR, UserRole.STUDENT)
   @ApiOperation({ summary: 'Get all courses (paginated)' })
   @ApiHeader({ name: 'Accept-Language', example: 'en', required: false })
   @ApiQuery({
