@@ -42,6 +42,7 @@ describe('AuthController', () => {
       expect(jwtService.signAsync).toHaveBeenCalledWith({
         email: requestUser.email.value,
         sub: requestUser.id,
+        roles: requestUser.roles,
       });
     });
   });
