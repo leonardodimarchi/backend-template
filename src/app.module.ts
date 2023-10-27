@@ -3,6 +3,7 @@ import { CourseModule } from '@modules/course/course.module';
 import { UserModule } from '@modules/user/user.module';
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from '@shared/infra/database/database.module';
+import { EnvModule } from '@shared/infra/env/env.module';
 import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
 import * as path from 'path';
 
@@ -20,8 +21,9 @@ import * as path from 'path';
         '../src/generated/i18n.generated.ts',
       ),
     }),
-    AuthModule,
     DatabaseModule,
+    EnvModule,
+    AuthModule,
     UserModule,
     CourseModule,
   ],

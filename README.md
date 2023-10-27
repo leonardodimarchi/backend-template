@@ -36,10 +36,10 @@ This is where i'm going to place my ideas and things that i want to do or use in
 - [ ] Add user reset password module
 - [x] Add some module to interact with user (such as course or quizzes)
 - [x] Auth module with passport
-- [ ] Validate request user permissions when calling a method (for example, an admin user cannot enroll at a course)
+- [x] Validate request user permissions when calling a method (for example, an admin user cannot enroll at a course)
 - [x] Add base user roles such as Admin, Student and Instructor
-- [ ] Environment service
-- [ ] Add JWT Secret
+- [x] Environment service
+- [x] Add JWT Secret
 - [ ] Translate Auth error messages
 - [ ] Translate role guard error messages
 - [x] SWC
