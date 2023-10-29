@@ -51,7 +51,7 @@ export class CourseController {
   ) {}
 
   @Get()
-  @ProtectedTo(UserRole.ADMIN, UserRole.INSTRUCTOR, UserRole.STUDENT)
+  @ProtectedTo(UserRole.INSTRUCTOR)
   @ApiOperation({ summary: 'Get all courses (paginated)' })
   @ApiHeader({ name: 'Accept-Language', example: 'en', required: false })
   @ApiQuery({
@@ -84,8 +84,7 @@ export class CourseController {
   }
 
   @Post()
-  @UseGuards(AuthJwtGuard)
-  @ApiBearerAuth()
+  @ProtectedTo(UserRole.ADMIN, UserRole.INSTRUCTOR, UserRole.STUDENT)
   @ApiOperation({ summary: 'Creates a new course' })
   @ApiHeader({ name: 'Accept-Language', example: 'en', required: false })
   @ApiBody({

@@ -7,10 +7,12 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { I18nContext } from 'nestjs-i18n';
+import { I18nTranslations } from 'src/generated/i18n.generated';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+  constructor(private readonly reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
     const roles = this.reflector.get<UserRole[]>('roles', context.getHandler());
@@ -22,16 +24,14 @@ export class RolesGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const user = request.user as RequestUserEntity;
 
+    const i18n = I18nContext.current<I18nTranslations>();
+
     if (!user || !user.roles) {
-      throw new ForbiddenException(
-        'Você não possui autorização para acessar esse recurso.',
-      );
+      throw new ForbiddenException(i18n?.t('auth.errors.no-authorization'));
     }
 
     if (!roles.some((role) => user.roles.includes(role))) {
-      throw new ForbiddenException(
-        'Você não possui autorização para acessar esse recurso.',
-      );
+      throw new ForbiddenException(i18n?.t('auth.errors.no-authorization'));
     }
 
     return true;

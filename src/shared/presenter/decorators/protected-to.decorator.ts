@@ -17,6 +17,6 @@ export const ProtectedTo = (...roles: UserRole[]) =>
     ApiForbiddenResponse({
       type: ForbiddenException,
       status: 403,
-      description: 'Você não possui autorização para acessar esse recurso.',
+      description: 'You are not authorized to access this resource.',
     }),
   );

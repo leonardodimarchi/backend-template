@@ -40,6 +40,6 @@ This is where i'm going to place my ideas and things that i want to do or use in
 - [x] Add base user roles such as Admin, Student and Instructor
 - [x] Environment service
 - [x] Add JWT Secret
-- [ ] Translate Auth error messages
-- [ ] Translate role guard error messages
+- [x] Translate Auth error messages
+- [x] Translate role guard error messages
 - [x] SWC
