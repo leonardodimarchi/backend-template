@@ -34,6 +34,7 @@ This is where i'm going to place my ideas and things that i want to do or use in
   - [x] DTO translations
 - [ ] Serverless adapter example
 - [ ] Add user reset password module
+- [ ] Add templates to create new resources modules
 - [x] Add some module to interact with user (such as course or quizzes)
 - [x] Auth module with passport
 - [x] Validate request user permissions when calling a method (for example, an admin user cannot enroll at a course)
