@@ -23,7 +23,7 @@ export class $EntityName$Controller {
   async getAll(
     @Query() queryParams: PaginatedQueryParams,
   ): Promise<PaginatedViewModel<$EntityName$Entity, $EntityName$ViewModel>> {
-    const result = await this.getAll$EntityPluralName$UseCase.exec({
+    const result = await this.getAllUseCase.exec({
       paginationOptions: {
         page: queryParams.page,
         pageLimit: queryParams.pageLimit,
@@ -56,7 +56,7 @@ export class $EntityName$Controller {
   ): Promise<$EntityName$ViewModel> {
     const { } = payload;
 
-    const result = await this.create$EntityName$UseCase.exec({
+    const result = await this.createUseCase.exec({
 
     });
 

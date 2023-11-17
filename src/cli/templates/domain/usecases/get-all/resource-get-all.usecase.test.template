@@ -1,13 +1,3 @@
-import { MockCourse } from 'test/factories/mock-course';
-import { InMemoryCourseRepository } from 'test/repositories/in-memory-course-repository';
-import { InMemoryRepository } from 'test/repositories/in-memory-repository';
-import { $EntityName$Entity } from '../entities/$EntityName$/$EntityName$.entity';
-import { $EntityName$Repository } from '../repositories/$EntityName$.repository';
-import {
-  GetAll$EntityPluralName$UseCase,
-  GetAll$EntityPluralName$UseCaseOutput,
-} from './get-all-$EntityPluralName$.usecase';
-
 describe('GetAll$EntityName$UseCase', () => {
   let usecase: GetAll$EntityName$UseCase;
   let repository: InMemoryRepository<$EntityName$Repository, $EntityName$Entity>;

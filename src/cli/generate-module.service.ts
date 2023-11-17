@@ -114,7 +114,7 @@ export class GenerateModuleService extends CommandRunner {
       suffixFileName: 'typeorm',
       extension: 'repository',
       templateName:
-        'infra/database/typeorm/repositories/resource-typeorm.repository',
+        'templates/infra/database/typeorm/repositories/resource-typeorm.repository',
       logName: 'um repositorio do typeorm',
     });
 
