@@ -1,0 +1,69 @@
+@ApiTags('$EntityControllerDisplayName$')
+@Controller('$EntityControllerPrefixName$')
+export class $EntityName$Controller {
+
+  constructor(
+    private readonly getAllUseCase: GetAll$EntityPluralName$UseCase,
+    private readonly createUseCase: Create$EntityName$UseCase,
+  ) { }
+
+  @Get()
+  @ProtectedTo(UserRole.ADMIN)
+  @ApiOperation({ summary: 'Get all $EntityPluralName$ (paginated)' })
+  @ApiHeader({ name: 'Accept-Language', example: 'en', required: false })
+  @ApiQuery({
+    type: PaginatedQueryParams,
+    required: true,
+    description: 'Pagination options',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: PaginatedViewModel<$EntityName$Entity, $EntityName$ViewModel>,
+  })
+  async getAll(
+    @Query() queryParams: PaginatedQueryParams,
+  ): Promise<PaginatedViewModel<$EntityName$Entity, $EntityName$ViewModel>> {
+    const result = await this.getAll$EntityPluralName$UseCase.exec({
+      paginationOptions: {
+        page: queryParams.page,
+        pageLimit: queryParams.pageLimit,
+      },
+    });
+
+    if (result.isRight()) {
+      return new PaginatedViewModel(
+        result.value.paginated$EntityPluralName$,
+        $EntityName$ViewModel,
+      );
+    }
+
+    throw new InternalServerErrorException();
+  }
+
+  @Post()
+  @ProtectedTo(UserRole.ADMIN)
+  @ApiOperation({ summary: 'Creates a new $EntityName$' })
+  @ApiHeader({ name: 'Accept-Language', example: 'en', required: false })
+  @ApiBody({
+    required: true,
+    type: Create$EntityName$Payload,
+    description: '$EntityName$ information',
+  })
+  @ApiResponse({ status: HttpStatus.CREATED, type: $EntityName$ViewModel })
+  async create(
+    @Body() payload: Create$EntityName$Payload,
+    @I18n() i18n: I18nContext<I18nTranslations>,
+  ): Promise<$EntityName$ViewModel> {
+    const { } = payload;
+
+    const result = await this.create$EntityName$UseCase.exec({
+
+    });
+
+    if (result.isRight()) {
+      return new $EntityName$ViewModel(result.value.created$EntityName$);
+    }
+
+    throw new InternalServerErrorException();
+  }
+}

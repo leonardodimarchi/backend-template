@@ -1,0 +1,5 @@
+export class $EntityName$ViewModel extends BaseEntityViewModel {
+  constructor(entity: $EntityName$Entity) {
+    super(entity);
+  }
+}

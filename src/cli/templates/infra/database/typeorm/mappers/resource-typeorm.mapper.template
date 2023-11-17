@@ -1,0 +1,25 @@
+export class TypeOrm$EntityName$Mapper {
+  static toEntity(schema: $EntityName$Schema): $EntityName$Entity {
+    const entity = $EntityName$Entity.create(
+      {
+      },
+      {
+        id: schema.id,
+        createdAt: schema.createdAt,
+        updatedAt: schema.updatedAt,
+      },
+    );
+
+    if (entity.isLeft()) {
+      throw new Error(`Could not map entity schema to entity: ${entity.value}`);
+    }
+
+    return entity.value;
+  }
+
+  static toSchema(entity: $EntityName$Entity): $EntityName$Schema {
+    return $EntityName$Schema.create({
+      id: entity.id,
+    });
+  }
+}

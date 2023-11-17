@@ -1,0 +1,11 @@
+import { PaginatedEntitiesOptions } from '@shared/infra/database/interfaces/paginated-entities-options.interface.';
+import { PaginatedEntities } from '@shared/infra/database/interfaces/paginated-entities.interface';
+import { UUID } from 'node:crypto';
+
+export abstract class $EntityName$Repository {
+  abstract save(entity: $EntityName$Entity): Promise<void>;
+  abstract getById(id: UUID): Promise<$EntityName$Entity | null>;
+  abstract getAllPaginated(
+    options: PaginatedEntitiesOptions,
+  ): Promise<PaginatedEntities<$EntityName$Entity>>;
+}

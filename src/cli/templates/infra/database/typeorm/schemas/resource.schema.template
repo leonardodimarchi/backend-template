@@ -1,0 +1,2 @@
+@Entity('$EntityDatabaseTableName$')
+export class $EntityName$Schema extends BaseSchema {}

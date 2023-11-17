@@ -1,0 +1,31 @@
+export interface GetAll$EntityPluralName$UseCaseInput {
+  paginationOptions: PaginatedEntitiesOptions;
+}
+
+export interface GetAll$EntityPluralName$UseCaseOutput {
+  paginated$EntityPluralName$: PaginatedEntities<$EntityName$Entity>;
+}
+
+export type GetAll$EntityPluralName$UseCaseErrors = Error;
+
+@Injectable()
+export class GetAll$EntityPluralName$UseCase
+  implements
+    UseCase<
+      GetAll$EntityPluralName$UseCaseInput,
+      GetAll$EntityPluralName$UseCaseOutput,
+      GetAll$EntityPluralName$UseCaseErrors
+    >
+{
+  constructor(private readonly repository: $EntityName$Repository) {}
+
+  async exec({
+    paginationOptions,
+  }: GetAll$EntityPluralName$UseCaseInput): Promise<
+    Either<GetAll$EntityPluralName$UseCaseErrors, GetAll$EntityPluralName$UseCaseOutput>
+  > {
+    const result = await this.repository.getAllPaginated(paginationOptions);
+
+    return new Right({ paginated$EntityPluralName$: result });
+  }
+}

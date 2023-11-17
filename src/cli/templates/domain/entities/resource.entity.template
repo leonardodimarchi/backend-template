@@ -1,0 +1,27 @@
+import { BaseEntity, BaseEntityProps } from '@shared/domain/base.entity';
+import { Either, Right } from '@shared/helpers/either';
+import { Replace } from '@shared/helpers/replace';
+
+export interface $EntityName$EntityProps {}
+
+export type $EntityName$EntityCreateProps = Replace<
+  $EntityName$EntityProps,
+  {}
+>;
+
+export class $EntityName$Entity extends BaseEntity<$EntityName$EntityProps> {
+  private constructor(
+    props: $EntityName$EntityProps,
+    baseEntityProps?: BaseEntityProps,
+  ) {
+    super(props, baseEntityProps);
+    Object.freeze(this);
+  }
+
+  static create(
+    {}: $EntityName$EntityCreateProps,
+    baseEntityProps?: BaseEntityProps,
+  ): Either<Error, $EntityName$Entity> {
+    return new Right(new $EntityName$Entity({}, baseEntityProps));
+  }
+}

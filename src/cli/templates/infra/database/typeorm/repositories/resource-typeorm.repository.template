@@ -1,0 +1,44 @@
+export class TypeOrm$EntityName$Repository implements $EntityName$Repository {
+  constructor(
+    @InjectRepository($EntityName$Schema)
+    private typeOrmRepository: Repository<$EntityName$Schema>,
+  ) {}
+
+  async save(entity: $EntityName$Entity): Promise<void> {
+    await this.typeOrmRepository.save(TypeOrm$EntityName$Mapper.toSchema(entity));
+  }
+
+  async getById(id: UUID): Promise<$EntityName$Entity | null> {
+    const schema = await this.typeOrmRepository.findOne({
+      where: {
+        id,
+      },
+    });
+
+    if (!schema) {
+      return null;
+    }
+
+    return TypeOrm$EntityName$Mapper.toEntity(schema);
+  }
+
+  async getAllPaginated(
+    options: PaginatedEntitiesOptions,
+  ): Promise<PaginatedEntities<$EntityName$Entity>> {
+    const page = options.page || 1;
+    const take = options.pageLimit || 10;
+    const skip = (page - 1) * take;
+
+    const [entities, totalCount] = await this.typeOrmRepository.findAndCount({
+      skip,
+      take,
+    });
+
+    return {
+      page,
+      pageLimit: take,
+      totalPageCount: Math.ceil(totalCount / take),
+      entities: entities.map(TypeOrm$EntityName$Mapper.toEntity),
+    };
+  }
+}

@@ -1,0 +1,6 @@
+@Module({
+  imports: [TypeOrmModule.forFeature([$EntityName$Schema])],
+  providers: [{ provide: $EntityName$Repository, useClass: TypeOrm$EntityName$Repository }],
+  exports: [$EntityName$Repository],
+})
+export class $EntityName$DatabaseModule {}

@@ -1,0 +1,48 @@
+import { faker } from "@faker-js/faker";
+import { UUID } from "crypto";
+import { BaseEntityProps } from "@shared/domain/base.entity";
+
+interface CreateMock$EntityName$OverrideProps {
+  override?: Partial<$EntityName$EntityCreateProps>;
+  basePropsOverride?: Partial<BaseEntityProps>;
+}
+
+export class Mock$EntityName$ {
+  static createEntity({
+    override,
+    basePropsOverride,
+  }: CreateMock$EntityName$OverrideProps = {}): $EntityName$Entity {
+    const overrideProps = override ?? {};
+    const entityPropsOverride = basePropsOverride ?? {};
+
+    const entity = $EntityName$Entity.create(
+      {
+        ...overrideProps,
+      },
+      {
+        id: faker.string.uuid() as UUID,
+        createdAt: faker.date.past(),
+        updatedAt: faker.date.past(),
+        ...entityPropsOverride,
+      }
+    );
+
+    if (entity.isLeft()) {
+      throw new Error(`Mock $EntityName$ error: ${ entity.value }`)
+    }
+
+    return entity.value;
+  }
+
+
+  static createViewModel(override: CreateMock$EntityName$OverrideProps = {}): $EntityName$ViewModel {
+    const entity = Mock$EntityName$.createEntity(override);
+
+    return new $EntityName$ViewModel(entity);
+  }
+
+  static createPayload(): Create$EntityName$Payload {
+    return {
+    }
+  }
+}

@@ -13,8 +13,9 @@ export class TypeOrmCourseRepository implements CourseRepository {
     @InjectRepository(CourseSchema)
     private typeOrmRepository: Repository<CourseSchema>,
   ) {}
-  async save(course: CourseEntity): Promise<void> {
-    await this.typeOrmRepository.save(TypeOrmCourseMapper.toSchema(course));
+
+  async save(entity: CourseEntity): Promise<void> {
+    await this.typeOrmRepository.save(TypeOrmCourseMapper.toSchema(entity));
   }
 
   async getById(id: UUID): Promise<CourseEntity | null> {

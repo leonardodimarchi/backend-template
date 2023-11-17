@@ -1,0 +1,26 @@
+describe('Create$EntityName$UseCase', () => {
+  let usecase: Create$EntityName$UseCase;
+  let repository: InMemoryRepository<$EntityName$Repository, $EntityName$Entity>;
+
+  beforeEach(() => {
+    repository = new InMemory$EntityName$Repository();
+    usecase = new Create$EntityName$UseCase(repository);
+  });
+
+  it('should return a $EntityName$', async () => {
+    const result = await usecase.exec({
+    });
+
+    expect(result.isRight()).toBeTruthy();
+    expect(
+      (result.value as Create$EntityName$UseCaseOutput).created$EntityName$,
+    ).toBeInstanceOf($EntityName$Entity);
+  });
+
+  it('should persist the $EntityName$', async () => {
+    await usecase.exec({
+    });
+
+    expect(repository.items).toHaveLength(1);
+  });
+});

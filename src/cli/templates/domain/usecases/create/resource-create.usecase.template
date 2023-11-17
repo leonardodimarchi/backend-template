@@ -1,0 +1,37 @@
+export interface Create$EntityName$UseCaseInput {}
+
+export interface Create$EntityName$UseCaseOutput {
+  created$EntityName$: $EntityName$Entity;
+}
+
+export type Create$EntityName$UseCaseErrors = Error
+
+@Injectable()
+export class Create$EntityName$UseCase
+  implements
+    UseCase<
+      Create$EntityName$UseCaseInput,
+      Create$EntityName$UseCaseOutput,
+      Create$EntityName$UseCaseErrors
+    >
+{
+  constructor(
+    private readonly repository: $EntityName$Repository,
+  ) {}
+
+  async exec({
+  }: Create$EntityName$UseCaseInput): Promise<
+    Either<Create$EntityName$UseCaseErrors, Create$EntityName$UseCaseOutput>
+  > {
+    const $EntityName$Result = $EntityName$Entity.create({
+    });
+
+    if ($EntityName$Result.isLeft()) {
+      return new Left($EntityName$Result.value);
+    }
+
+    await this.repository.save($EntityName$Result.value);
+
+    return new Right({ created$EntityName$: $EntityName$Result.value });
+  }
+}

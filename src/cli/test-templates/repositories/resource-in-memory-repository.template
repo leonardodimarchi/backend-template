@@ -1,0 +1,38 @@
+import { UUID } from 'crypto';
+
+export class InMemory$EntityName$Repository
+  implements InMemoryRepository<$EntityName$Repository, $EntityName$Entity>
+{
+  public items: $EntityName$Entity[] = [];
+
+  async save(course: $EntityName$Entity): Promise<void> {
+    this.items.push(course);
+  }
+
+  async getById(id: UUID): Promise<$EntityName$Entity | null> {
+    const entity = this.items.find((c) => c.id === id);
+
+    if (!entity) {
+      return null;
+    }
+
+    return entity;
+  }
+
+  async getAllPaginated(
+    options: PaginatedEntitiesOptions,
+  ): Promise<PaginatedEntities<$EntityName$Entity>> {
+    const take = options.pageLimit || 10;
+    const skip = ((options.page || 1) - 1) * take;
+
+    const entities = this.items.slice(skip, skip + take);
+    const totalPageCount = Math.ceil(this.items.length / take);
+
+    return {
+      page: options.page || 1,
+      pageLimit: take,
+      totalPageCount: totalPageCount,
+      entities,
+    };
+  }
+}

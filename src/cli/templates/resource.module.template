@@ -1,0 +1,9 @@
+@Module({
+  imports: [$EntityName$DatabaseModule],
+  controllers: [$EntityName$Controller],
+  providers: [
+    GetAll$EntityName$sUseCase,
+    Create$EntityName$UseCase,
+  ],
+})
+export class $EntityName$Module {}
