@@ -64,7 +64,7 @@ export class GenerateModuleService extends CommandRunner {
       extension: 'usecase.test',
       templateName:
         'templates/domain/usecases/create/resource-create.usecase.test',
-      logName: 'um caso de uso de criação',
+      logName: 'o arquivo de teste do caso de uso de criação',
     });
 
     await this.createTemplate({
@@ -84,7 +84,7 @@ export class GenerateModuleService extends CommandRunner {
       extension: 'usecase.test',
       templateName:
         'templates/domain/usecases/get-all/resource-get-all.usecase.test',
-      logName: 'um caso de uso de buscar os dados',
+      logName: 'o arquivo de teste do caso de uso de buscar os dados',
     });
   }
 
@@ -134,6 +134,14 @@ export class GenerateModuleService extends CommandRunner {
       extension: 'controller',
       templateName: 'templates/presenter/controllers/resource.controller',
       logName: 'um controller',
+    });
+
+    await this.createTemplate({
+      baseName: name,
+      folder: 'presenter/controllers',
+      extension: 'controller.test',
+      templateName: 'templates/presenter/controllers/resource.controller.test',
+      logName: 'o arquivo de teste para o controller',
     });
 
     await this.createTemplate({

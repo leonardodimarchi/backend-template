@@ -1,0 +1,44 @@
+describe('$EntityName$Controller', () => {
+  let controller: $EntityName$Controller;
+  let getAll$EntityName$UseCase: DeepMocked<GetAll$EntityName$sUseCase>;
+  let create$EntityName$UseCase: DeepMocked<Create$EntityName$UseCase>;
+
+  beforeEach(() => {
+    getAll$EntityName$UseCase = createMock<GetAll$EntityName$sUseCase>();
+    create$EntityName$UseCase = createMock<Create$EntityName$UseCase>();
+    controller = new $EntityName$Controller(
+      getAll$EntityName$UseCase,
+      create$EntityName$UseCase,
+    );
+  });
+
+  describe('create', () => {
+    it('should return a view model', async () => {
+      const created$EntityName$ = Mock$EntityName$.createEntity();
+      const expectedResult = new $EntityName$ViewModel(created$EntityName$);
+
+      create$EntityName$UseCase.exec.mockResolvedValueOnce(new Right({ created$EntityName$ }));
+
+      const result = await controller.create(Mock$EntityName$.createPayload(), createI18nMock());
+
+      expect(result).toBeInstanceOf($EntityName$ViewModel);
+      expect(result).toEqual(expectedResult);
+    });
+
+    it('should call the usecase with the correct params', async () => {
+      const created$EntityName$ = Mock$EntityName$.createEntity();
+      const payload = Mock$EntityName$.createPayload();
+
+      jest
+        .spyOn(create$EntityName$UseCase, 'exec')
+        .mockResolvedValueOnce(new Right({ created$EntityName$ }));
+
+      await controller.create(payload, createI18nMock());
+
+      expect(create$EntityName$UseCase.exec).toHaveBeenCalledTimes(1);
+      expect(create$EntityName$UseCase.exec).toHaveBeenCalledWith<
+        [Create$EntityName$UseCaseInput]
+      >({});
+    });
+  });
+});
