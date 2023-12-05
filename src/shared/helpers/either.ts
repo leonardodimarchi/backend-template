@@ -31,3 +31,11 @@ export class Right<TLeft, TRight> {
 }
 
 export type Either<TLeft, TRight> = Left<TLeft, TRight> | Right<TLeft, TRight>;
+
+export function left<T>(value: T): Left<T, never> {
+  return new Left(value);
+}
+
+export function right<T>(value: T): Right<never, T> {
+  return new Right(value);
+}
