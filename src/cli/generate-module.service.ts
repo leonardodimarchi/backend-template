@@ -147,10 +147,10 @@ export class GenerateModuleService extends CommandRunner {
     await this.createTemplate({
       baseName: name,
       folder: 'presenter/models/payloads',
-      suffixFileName: 'create',
+      prefixFilename: 'create',
       extension: 'payload',
       templateName:
-        'templates/presenter/models/payloads/resource-create.payload',
+        'templates/presenter/models/payloads/create-resource.payload',
       logName: 'um payload de criação',
     });
 
