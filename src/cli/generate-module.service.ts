@@ -186,8 +186,8 @@ export class GenerateModuleService extends CommandRunner {
     await this.createTemplate({
       baseName: name,
       folder: '../../../test/repositories',
-      suffixFileName: 'in-memory-repository',
-      templateName: 'test-templates/repositories/resource-in-memory-repository',
+      prefixFilename: 'in-memory-repository',
+      templateName: 'test-templates/repositories/in-memory-resource-repository',
       logName: 'um repositório em memória',
     });
   }
