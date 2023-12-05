@@ -51,39 +51,39 @@ export class GenerateModuleService extends CommandRunner {
     await this.createTemplate({
       baseName: name,
       folder: 'domain/usecases/create',
-      suffixFileName: 'create',
+      prefixFilename: 'create',
       extension: 'usecase',
-      templateName: 'templates/domain/usecases/create/resource-create.usecase',
+      templateName: 'templates/domain/usecases/create/create-resource.usecase',
       logName: 'um caso de uso de criação',
     });
 
     await this.createTemplate({
       baseName: name,
       folder: 'domain/usecases/create',
-      suffixFileName: 'create',
+      prefixFilename: 'create',
       extension: 'usecase.test',
       templateName:
-        'templates/domain/usecases/create/resource-create.usecase.test',
+        'templates/domain/usecases/create/create-resource.usecase.test',
       logName: 'o arquivo de teste do caso de uso de criação',
     });
 
     await this.createTemplate({
       baseName: name,
       folder: 'domain/usecases/get-all',
-      suffixFileName: 'get-all',
+      prefixFilename: 'get-all',
       extension: 'usecase',
       templateName:
-        'templates/domain/usecases/get-all/resource-get-all.usecase',
+        'templates/domain/usecases/get-all/get-all-resource.usecase',
       logName: 'um caso de uso de buscar os dados',
     });
 
     await this.createTemplate({
       baseName: name,
       folder: 'domain/usecases/get-all',
-      suffixFileName: 'get-all',
+      prefixFilename: 'get-all',
       extension: 'usecase.test',
       templateName:
-        'templates/domain/usecases/get-all/resource-get-all.usecase.test',
+        'templates/domain/usecases/get-all/get-all-resource.usecase.test',
       logName: 'o arquivo de teste do caso de uso de buscar os dados',
     });
   }
