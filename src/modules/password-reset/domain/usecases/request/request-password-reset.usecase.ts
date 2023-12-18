@@ -1,4 +1,5 @@
-import { RequestUserEntity } from '@modules/auth/domain/entities/request-user.entity';
+import { UserNotFoundError } from '@modules/user/domain/errors/user-not-found.error';
+import { UserRepository } from '@modules/user/domain/repositories/user.repository';
 import { Injectable } from '@nestjs/common';
 import { UseCase } from '@shared/domain/usecase';
 import { Either, Left, Right } from '@shared/helpers/either';
@@ -6,14 +7,14 @@ import { PasswordResetEntity } from '../../entities/password-reset.entity';
 import { PasswordResetRepository } from '../../repositories/password-reset.repository';
 
 export interface RequestPasswordResetUseCaseInput {
-  requestUser: RequestUserEntity;
+  email: string;
 }
 
 export interface RequestPasswordResetUseCaseOutput {
   createdPasswordReset: PasswordResetEntity;
 }
 
-export type RequestPasswordResetUseCaseErrors = Error;
+export type RequestPasswordResetUseCaseErrors = UserNotFoundError | Error;
 
 @Injectable()
 export class RequestPasswordResetUseCase
@@ -24,15 +25,24 @@ export class RequestPasswordResetUseCase
       RequestPasswordResetUseCaseErrors
     >
 {
-  constructor(private readonly repository: PasswordResetRepository) {}
+  constructor(
+    private readonly repository: PasswordResetRepository,
+    private readonly userRepository: UserRepository,
+  ) {}
 
   async exec({
-    requestUser,
+    email,
   }: RequestPasswordResetUseCaseInput): Promise<
     Either<RequestPasswordResetUseCaseErrors, RequestPasswordResetUseCaseOutput>
   > {
+    const user = await this.userRepository.getByEmail(email);
+
+    if (!user) {
+      return new Left(new UserNotFoundError());
+    }
+
     const PasswordResetResult = PasswordResetEntity.create({
-      userId: requestUser.id,
+      userId: user.id,
     });
 
     if (PasswordResetResult.isLeft()) {
