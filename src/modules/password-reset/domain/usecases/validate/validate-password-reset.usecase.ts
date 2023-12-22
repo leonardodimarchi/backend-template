@@ -1,9 +1,9 @@
 import { RequestUserEntity } from '@modules/auth/domain/entities/request-user.entity';
 import { Injectable } from '@nestjs/common';
-import { UseCase } from '@shared/domain/usecase';
 import { Either, left, right } from '@shared/helpers/either';
 import { PasswordResetNotFoundError } from '../../errors/password-reset-not-found.error';
 import { PasswordResetRepository } from '../../repositories/password-reset.repository';
+import { UseCase } from '@shared/domain/usecases/usecase';
 
 export interface ValidatePasswordResetUseCaseInput {
   requestUser: RequestUserEntity;

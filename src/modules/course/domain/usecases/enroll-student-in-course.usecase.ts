@@ -1,5 +1,4 @@
 import { UserRepository } from '@modules/user/domain/repositories/user.repository';
-import { UseCase } from '@shared/domain/usecase';
 import { Either, Left, Right } from '@shared/helpers/either';
 import { UUID } from 'crypto';
 import { EnrollmentEntity } from '../entities/enrollment/enrollment.entity';
@@ -8,6 +7,7 @@ import { StudentAlreadyEnrolledError } from '../errors/student-already-enrolled.
 import { StudentNotFoundError } from '../errors/student-not-found.error';
 import { CourseRepository } from '../repositories/course.repository';
 import { EnrollmentRepository } from '../repositories/enrollment.repository';
+import { UseCase } from '@shared/domain/usecases/usecase';
 
 export interface EnrollStudentInCourseUseCaseInput {
   studentId: UUID;

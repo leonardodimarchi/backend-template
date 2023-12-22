@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { BaseEntity } from '@shared/domain/base.entity';
+import { BaseEntity } from '@shared/domain/entities/base.entity';
 import { UUID } from 'crypto';
 
 export class BaseEntityViewModel {

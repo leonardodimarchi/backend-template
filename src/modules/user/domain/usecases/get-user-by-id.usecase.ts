@@ -1,9 +1,9 @@
-import { UseCase } from '@shared/domain/usecase';
 import { Either, Left, Right } from '@shared/helpers/either';
 import { UUID } from 'crypto';
 import { UserEntity } from '../entities/user/user.entity';
 import { UserNotFoundError } from '../errors/user-not-found.error';
 import { UserRepository } from '../repositories/user.repository';
+import { UseCase } from '@shared/domain/usecases/usecase';
 
 export interface GetUserByIdUseCaseInput {
   id: UUID;

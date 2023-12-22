@@ -12,6 +12,11 @@ import {
   RequestPasswordResetUseCase,
   RequestPasswordResetUseCaseOutput,
 } from './request-password-reset.usecase';
+import { DeepMocked, createMock } from 'test/utils/create-mock';
+import {
+  MailService,
+  SendMailOptions,
+} from '@shared/domain/services/mail.service';
 
 describe('RequestPasswordResetUseCase', () => {
   let usecase: RequestPasswordResetUseCase;
@@ -21,11 +26,17 @@ describe('RequestPasswordResetUseCase', () => {
     PasswordResetEntity
   >;
   let userRepository: InMemoryRepository<UserRepository, UserEntity>;
+  let mailService: DeepMocked<MailService>;
 
   beforeEach(() => {
     repository = new InMemoryPasswordResetRepository();
     userRepository = new InMemoryUserRepository();
-    usecase = new RequestPasswordResetUseCase(repository, userRepository);
+    mailService = createMock<MailService>();
+    usecase = new RequestPasswordResetUseCase(
+      repository,
+      userRepository,
+      mailService,
+    );
   });
 
   it('should persist and return a PasswordReset', async () => {
@@ -59,5 +70,29 @@ describe('RequestPasswordResetUseCase', () => {
     expect(repository.items).toHaveLength(0);
     expect(result.isLeft()).toBeTruthy();
     expect(result.value).toBeInstanceOf(UserNotFoundError);
+  });
+
+  it('should send an email to the user containing the code', async () => {
+    const email = faker.internet.email();
+    const user = MockUser.createEntity({
+      override: {
+        email,
+      },
+    });
+
+    userRepository.save(user);
+
+    await usecase.exec({
+      email,
+    });
+
+    expect(repository.items).toHaveLength(1);
+    expect(mailService.send).toHaveBeenCalledTimes(1);
+    expect(mailService.send).toHaveBeenCalledWith(
+      expect.objectContaining<Partial<SendMailOptions>>({
+        to: email,
+        bodyHtml: expect.stringContaining(repository.items[0].code),
+      }),
+    );
   });
 });

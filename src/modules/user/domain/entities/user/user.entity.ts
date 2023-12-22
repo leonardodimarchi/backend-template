@@ -1,11 +1,14 @@
-import { BaseEntity, BaseEntityProps } from '@shared/domain/base.entity';
-import { Replace } from '@shared/helpers/replace';
-import { Email } from './value-objects/email';
+import {
+  BaseEntity,
+  BaseEntityProps,
+} from '@shared/domain/entities/base.entity';
 import { Either, Left, Right } from '@shared/helpers/either';
+import { Replace } from '@shared/helpers/replace';
 import { InvalidEmailError } from '../../errors/invalid-email.error';
-import { Name } from './value-objects/name';
 import { InvalidNameError } from '../../errors/invalid-name.error';
 import { UserRole } from './user-role.enum';
+import { Email } from './value-objects/email';
+import { Name } from './value-objects/name';
 
 export interface UserEntityProps {
   name: Name;

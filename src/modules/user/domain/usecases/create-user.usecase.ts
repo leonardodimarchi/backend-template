@@ -1,4 +1,3 @@
-import { UseCase } from '@shared/domain/usecase';
 import { UserEntity } from '../entities/user/user.entity';
 import { UserRepository } from '../repositories/user.repository';
 import { DuplicatedEmailError } from '../errors/duplicated-email.error';
@@ -7,6 +6,7 @@ import { InvalidEmailError } from '../errors/invalid-email.error';
 import { Either, Left, Right } from '@shared/helpers/either';
 import { InvalidNameError } from '../errors/invalid-name.error';
 import { UserRole } from '../entities/user/user-role.enum';
+import { UseCase } from '@shared/domain/usecases/usecase';
 
 export interface CreateUserUseCaseInput {
   name: string;

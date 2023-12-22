@@ -1,5 +1,8 @@
 import { UserEntity } from '@modules/user/domain/entities/user/user.entity';
-import { BaseEntity, BaseEntityProps } from '@shared/domain/base.entity';
+import {
+  BaseEntity,
+  BaseEntityProps,
+} from '@shared/domain/entities/base.entity';
 import { Either, Left, Right } from '@shared/helpers/either';
 import { Replace } from '@shared/helpers/replace';
 import { UUID } from 'crypto';

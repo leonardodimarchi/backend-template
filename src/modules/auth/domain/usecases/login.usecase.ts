@@ -2,10 +2,10 @@ import { UserEntity } from '@modules/user/domain/entities/user/user.entity';
 import { InvalidEmailError } from '@modules/user/domain/errors/invalid-email.error';
 import { UserRepository } from '@modules/user/domain/repositories/user.repository';
 import { PasswordEncryptionService } from '@modules/user/domain/services/password-encryption.service';
-import { UseCase } from '@shared/domain/usecase';
 import { Either, Left, Right } from '@shared/helpers/either';
 import { IncorrectPasswordError } from '../errors/incorrect-password.error';
 import { UserNotFoundError } from '../errors/user-not-found.error';
+import { UseCase } from '@shared/domain/usecases/usecase';
 
 export interface LoginUseCaseInput {
   email: string;

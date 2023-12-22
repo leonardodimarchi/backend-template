@@ -11,7 +11,7 @@ describe('BaseEntity', () => {
   });
 
   it('should be created with a random uuid', () => {
-    const entity = new BaseEntity<{}>({});
+    const entity = new BaseEntity<object>({});
 
     const uuidRegex =
       /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -19,13 +19,13 @@ describe('BaseEntity', () => {
   });
 
   it('should be instantiated with a created date', () => {
-    const entity = new BaseEntity<{}>({});
+    const entity = new BaseEntity<object>({});
 
     expect(entity.createdAt.getTime()).toEqual(new Date().getTime());
   });
 
   it('should be instantiated with a updated date', () => {
-    const entity = new BaseEntity<{}>({});
+    const entity = new BaseEntity<object>({});
 
     expect(entity.updatedAt.getTime()).toEqual(new Date().getTime());
   });
@@ -35,7 +35,7 @@ describe('BaseEntity', () => {
     const createdAt = new Date();
     const updatedAt = new Date();
 
-    const entity = new BaseEntity<{}>({}, { id, createdAt, updatedAt });
+    const entity = new BaseEntity<object>({}, { id, createdAt, updatedAt });
 
     expect(entity.id).toEqual(id);
     expect(entity.createdAt).toEqual(createdAt);

@@ -3,7 +3,7 @@ import {
   PasswordResetEntity,
   PasswordResetEntityCreateProps,
 } from '@modules/password-reset/domain/entities/password-reset.entity';
-import { BaseEntityProps } from '@shared/domain/base.entity';
+import { BaseEntityProps } from '@shared/domain/entities/base.entity';
 import { UUID } from 'crypto';
 
 interface CreateMockPasswordResetOverrideProps {
