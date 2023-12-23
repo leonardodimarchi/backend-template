@@ -2,7 +2,7 @@ import { PasswordResetEntity } from '@modules/password-reset/domain/entities/pas
 import { PasswordResetRepository } from '@modules/password-reset/domain/repositories/password-reset.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UUID } from 'node:crypto';
-import { MoreThan, Repository } from 'typeorm';
+import { ILike, MoreThan, Repository } from 'typeorm';
 import { TypeOrmPasswordResetMapper } from '../mappers/password-reset-typeorm.mapper';
 import { PasswordResetSchema } from '../schemas/password-reset.schema';
 
@@ -36,6 +36,22 @@ export class TypeOrmPasswordResetRepository implements PasswordResetRepository {
     const schema = await this.typeOrmRepository.findOne({
       where: {
         userId,
+        validUntil: MoreThan(new Date()),
+        used: false,
+      },
+    });
+
+    if (!schema) {
+      return null;
+    }
+
+    return TypeOrmPasswordResetMapper.toEntity(schema);
+  }
+
+  async getValidByCode(code: string): Promise<PasswordResetEntity | null> {
+    const schema = await this.typeOrmRepository.findOne({
+      where: {
+        code: ILike(code),
         validUntil: MoreThan(new Date()),
         used: false,
       },

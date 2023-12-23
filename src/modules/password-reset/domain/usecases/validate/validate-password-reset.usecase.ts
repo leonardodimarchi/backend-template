@@ -1,4 +1,3 @@
-import { RequestUserEntity } from '@modules/auth/domain/entities/request-user.entity';
 import { Injectable } from '@nestjs/common';
 import { Either, left, right } from '@shared/helpers/either';
 import { PasswordResetNotFoundError } from '../../errors/password-reset-not-found.error';
@@ -6,7 +5,6 @@ import { PasswordResetRepository } from '../../repositories/password-reset.repos
 import { UseCase } from '@shared/domain/usecases/usecase';
 
 export interface ValidatePasswordResetUseCaseInput {
-  requestUser: RequestUserEntity;
   code: string;
 }
 
@@ -28,7 +26,6 @@ export class ValidatePasswordResetUseCase
   constructor(private readonly repository: PasswordResetRepository) {}
 
   async exec({
-    requestUser,
     code,
   }: ValidatePasswordResetUseCaseInput): Promise<
     Either<
@@ -36,16 +33,14 @@ export class ValidatePasswordResetUseCase
       ValidatePasswordResetUseCaseOutput
     >
   > {
-    const passwordReset = await this.repository.getValidByUserId(
-      requestUser.id,
-    );
+    const passwordReset = await this.repository.getValidByCode(code);
 
     if (!passwordReset) {
       return left(new PasswordResetNotFoundError());
     }
 
     return right({
-      matches: code.toLowerCase() === passwordReset.code.toLowerCase(),
+      matches: true,
     });
   }
 }

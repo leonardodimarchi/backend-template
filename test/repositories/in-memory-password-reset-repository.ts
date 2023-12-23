@@ -33,4 +33,20 @@ export class InMemoryPasswordResetRepository
 
     return entity;
   }
+
+  async getValidByCode(code: string): Promise<PasswordResetEntity | null> {
+    const entity = this.items.find((i) => {
+      return (
+        i.code.toLowerCase() === code.toLowerCase() &&
+        !i.used &&
+        i.validUntil > new Date()
+      );
+    });
+
+    if (!entity) {
+      return null;
+    }
+
+    return entity;
+  }
 }

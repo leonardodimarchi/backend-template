@@ -33,7 +33,6 @@ describe('ValidatePasswordResetUseCase', () => {
     repository.save(passwordReset);
 
     const result = await usecase.exec({
-      requestUser,
       code: passwordReset.code,
     });
 
@@ -43,54 +42,8 @@ describe('ValidatePasswordResetUseCase', () => {
     ).toBeTruthy();
   });
 
-  it('should return false if the code is not matching', async () => {
-    const requestUser = MockRequestUser.createEntity();
-    const passwordReset = MockPasswordReset.createEntity({
-      override: {
-        userId: requestUser.id,
-      },
-    });
-
-    repository.save(passwordReset);
-
-    const result = await usecase.exec({
-      requestUser,
-      code: 'RANDOM_CODE',
-    });
-
-    expect(result.isRight()).toBeTruthy();
-    expect(
-      (result.value as ValidatePasswordResetUseCaseOutput).matches,
-    ).toBeFalsy();
-  });
-
-  it('should consider the code as case insensitive', async () => {
-    const requestUser = MockRequestUser.createEntity();
-    const passwordReset = MockPasswordReset.createEntity({
-      override: {
-        userId: requestUser.id,
-        code: 'ABC4DEF1',
-      },
-    });
-
-    repository.save(passwordReset);
-
-    const result = await usecase.exec({
-      requestUser,
-      code: 'AbC4dEf1',
-    });
-
-    expect(result.isRight()).toBeTruthy();
-    expect(
-      (result.value as ValidatePasswordResetUseCaseOutput).matches,
-    ).toBeTruthy();
-  });
-
   it('should return a PasswordResetNotFoundError if a valid reset was not found', async () => {
-    const requestUser = MockRequestUser.createEntity();
-
     const result = await usecase.exec({
-      requestUser,
       code: 'AbC4dEf1',
     });
 
