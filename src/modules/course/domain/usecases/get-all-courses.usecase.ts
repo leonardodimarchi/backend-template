@@ -1,9 +1,9 @@
-import { UseCase } from '@shared/domain/usecase';
 import { Either, Right } from '@shared/helpers/either';
 import { PaginatedEntitiesOptions } from '@shared/infra/database/interfaces/paginated-entities-options.interface.';
 import { PaginatedEntities } from '@shared/infra/database/interfaces/paginated-entities.interface';
 import { CourseEntity } from '../entities/course/course.entity';
 import { CourseRepository } from '../repositories/course.repository';
+import { UseCase } from '@shared/domain/usecases/usecase';
 
 export interface GetAllCoursesUseCaseInput {
   paginationOptions: PaginatedEntitiesOptions;

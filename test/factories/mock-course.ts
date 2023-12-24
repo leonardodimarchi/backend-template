@@ -1,10 +1,13 @@
-import { faker } from "@faker-js/faker";
-import { CourseEntity, CourseEntityCreateProps } from "@modules/course/domain/entities/course/course.entity";
-import { BaseEntityProps } from "@shared/domain/base.entity";
-import { MockUser } from "./mock-user";
-import { UUID } from "crypto";
-import { CourseViewModel } from "@modules/course/presenter/models/view-models/course.view-model";
-import { CreateCoursePayload } from "@modules/course/presenter/models/payloads/create-course.payload";
+import { faker } from '@faker-js/faker';
+import {
+  CourseEntity,
+  CourseEntityCreateProps,
+} from '@modules/course/domain/entities/course/course.entity';
+import { CreateCoursePayload } from '@modules/course/presenter/models/payloads/create-course.payload';
+import { CourseViewModel } from '@modules/course/presenter/models/view-models/course.view-model';
+import { BaseEntityProps } from '@shared/domain/entities/base.entity';
+import { UUID } from 'crypto';
+import { MockUser } from './mock-user';
 
 interface CreateMockCourseOverrideProps {
   override?: Partial<CourseEntityCreateProps>;
@@ -32,18 +35,19 @@ export class MockCourse {
         createdAt: faker.date.past(),
         updatedAt: faker.date.past(),
         ...entityPropsOverride,
-      }
+      },
     );
 
     if (course.isLeft()) {
-      throw new Error(`Mock Course error: ${ course.value }`)
+      throw new Error(`Mock Course error: ${course.value}`);
     }
 
     return course.value;
   }
 
-
-  static createViewModel(override: CreateMockCourseOverrideProps = {}): CourseViewModel {
+  static createViewModel(
+    override: CreateMockCourseOverrideProps = {},
+  ): CourseViewModel {
     const entity = MockCourse.createEntity(override);
 
     return new CourseViewModel(entity);
@@ -55,6 +59,6 @@ export class MockCourse {
       description: faker.lorem.paragraph(),
       price: +faker.commerce.price(),
       instructorId: faker.string.uuid() as UUID,
-    }
+    };
   }
 }

@@ -1,11 +1,11 @@
 import { UserRepository } from '@modules/user/domain/repositories/user.repository';
-import { UseCase } from '@shared/domain/usecase';
 import { Either, Left, Right } from '@shared/helpers/either';
 import { UUID } from 'crypto';
 import { CourseEntity } from '../entities/course/course.entity';
 import { InstructorNotFoundError } from '../errors/instructor-not-found.error';
 import { InvalidMoneyError } from '../errors/invalid-money.error';
 import { CourseRepository } from '../repositories/course.repository';
+import { UseCase } from '@shared/domain/usecases/usecase';
 
 export interface CreateCourseUseCaseInput {
   title: string;

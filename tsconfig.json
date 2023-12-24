@@ -18,8 +18,12 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
-      "@modules/*": ["./src/modules/*"],
-      "@shared/*": ["./src/shared/*"]
+      "@modules/*": [
+        "./src/modules/*"
+      ],
+      "@shared/*": [
+        "./src/shared/*"
+      ]
     },
   }
 }

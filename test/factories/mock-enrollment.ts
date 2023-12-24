@@ -5,7 +5,7 @@ import {
 } from '@modules/course/domain/entities/enrollment/enrollment.entity';
 import { EnrollStudentPayload } from '@modules/course/presenter/models/payloads/enroll-student.payload';
 import { EnrollmentViewModel } from '@modules/course/presenter/models/view-models/enrollment.view-model';
-import { BaseEntityProps } from '@shared/domain/base.entity';
+import { BaseEntityProps } from '@shared/domain/entities/base.entity';
 import { UUID } from 'crypto';
 
 interface CreateMockEnrollmentOverrideProps {

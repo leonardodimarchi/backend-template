@@ -6,7 +6,7 @@ import {
 } from '@modules/user/domain/entities/user/user.entity';
 import { CreateUserPayload } from '@modules/user/presenter/models/payloads/create-user.payload';
 import { UserViewModel } from '@modules/user/presenter/models/view-models/user.view-model';
-import { BaseEntityProps } from '@shared/domain/base.entity';
+import { BaseEntityProps } from '@shared/domain/entities/base.entity';
 import { UUID } from 'crypto';
 
 interface CreateMockUserOverrideProps {
