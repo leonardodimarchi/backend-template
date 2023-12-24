@@ -1,16 +1,14 @@
-import { RequestUserEntity } from '@modules/auth/domain/entities/request-user.entity';
 import { UserRepository } from '@modules/user/domain/repositories/user.repository';
 import { PasswordEncryptionService } from '@modules/user/domain/services/password-encryption.service';
 import { Injectable } from '@nestjs/common';
-import { UseCase } from '@shared/domain/usecase';
 import { Either, left, right } from '@shared/helpers/either';
 import { IncorrectOldPasswordError } from '../../errors/incorrect-old-password.error';
-import { IncorrectPasswordResetCodeError } from '../../errors/incorrect-password-reset-code.error';
 import { PasswordResetNotFoundError } from '../../errors/password-reset-not-found.error';
 import { PasswordResetRepository } from '../../repositories/password-reset.repository';
+import { UserNotFoundError } from '@modules/user/domain/errors/user-not-found.error';
+import { UseCase } from '@shared/domain/usecases/usecase';
 
 export interface ExecutePasswordResetUseCaseInput {
-  requestUser: RequestUserEntity;
   code: string;
   oldPassword: string;
   newPassword: string;
@@ -21,7 +19,7 @@ export interface ExecutePasswordResetUseCaseOutput {}
 export type ExecutePasswordResetUseCaseErrors =
   | PasswordResetNotFoundError
   | IncorrectOldPasswordError
-  | IncorrectPasswordResetCodeError;
+  | UserNotFoundError;
 
 @Injectable()
 export class ExecutePasswordResetUseCase
@@ -39,22 +37,43 @@ export class ExecutePasswordResetUseCase
   ) {}
 
   async exec({
-    requestUser,
     code,
+    oldPassword,
+    newPassword,
   }: ExecutePasswordResetUseCaseInput): Promise<
     Either<ExecutePasswordResetUseCaseErrors, ExecutePasswordResetUseCaseOutput>
   > {
-    const passwordReset = await this.repository.getValidByUserId(
-      requestUser.id,
-    );
+    const passwordReset = await this.repository.getValidByCode(code);
 
     if (!passwordReset) {
       return left(new PasswordResetNotFoundError());
     }
 
-    if (code.toLowerCase() !== passwordReset.code) {
-      return left(new IncorrectPasswordResetCodeError());
+    const user = await this.userRepository.getById(passwordReset.userId);
+
+    if (!user) {
+      return left(new UserNotFoundError());
     }
+
+    const isOldPasswordCorrect = await this.passwordEncryptionService.compare(
+      oldPassword,
+      user.password,
+    );
+
+    if (!isOldPasswordCorrect) {
+      return left(new IncorrectOldPasswordError());
+    }
+
+    passwordReset.setAsUsed();
+
+    await this.repository.save(passwordReset);
+
+    const userNewPassword =
+      await this.passwordEncryptionService.hash(newPassword);
+
+    user.password = userNewPassword;
+
+    await this.userRepository.save(user);
 
     return right({});
   }

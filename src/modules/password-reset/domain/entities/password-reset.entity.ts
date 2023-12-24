@@ -85,4 +85,8 @@ export class PasswordResetEntity extends BaseEntity<PasswordResetEntityProps> {
   public get used(): boolean {
     return this.props.used;
   }
+
+  public setAsUsed(): void {
+    this.props.used = true;
+  }
 }
