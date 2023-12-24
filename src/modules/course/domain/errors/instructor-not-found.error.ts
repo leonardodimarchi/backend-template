@@ -1,4 +1,4 @@
-import { DomainError } from '@shared/domain/domain.error';
+import { DomainError } from '@shared/domain/errors/domain.error';
 
 export class InstructorNotFoundError extends Error implements DomainError {
   public instructorId: string;
