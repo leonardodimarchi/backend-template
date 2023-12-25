@@ -1,5 +1,6 @@
 import { AuthModule } from '@modules/auth/auth.module';
 import { CourseModule } from '@modules/course/course.module';
+import { PasswordResetModule } from '@modules/password-reset/password-reset.module';
 import { UserModule } from '@modules/user/user.module';
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from '@shared/infra/database/database.module';
@@ -26,6 +27,7 @@ import * as path from 'path';
     AuthModule,
     UserModule,
     CourseModule,
+    PasswordResetModule,
   ],
   controllers: [],
   providers: [],

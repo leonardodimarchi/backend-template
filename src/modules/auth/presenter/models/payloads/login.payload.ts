@@ -20,7 +20,7 @@ export class LoginPayload {
   )
   email: string;
 
-  @ApiProperty({ example: 'My@Password123' })
+  @ApiProperty({ example: 'J0hn.Doe@123' })
   @IsDefined({
     message: i18nValidationMessage<I18nTranslations>(
       'auth.validations.PASSWORD_IS_DEFINED',

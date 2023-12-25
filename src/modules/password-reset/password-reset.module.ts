@@ -4,9 +4,10 @@ import { RequestPasswordResetUseCase } from './domain/usecases/request/request-p
 import { ValidatePasswordResetUseCase } from './domain/usecases/validate/validate-password-reset.usecase';
 import { PasswordResetDatabaseModule } from './infra/database/password-reset-database.module';
 import { PasswordResetController } from './presenter/controllers/password-reset.controller';
+import { UserDatabaseModule } from '@modules/user/infra/database/user-database.module';
 
 @Module({
-  imports: [PasswordResetDatabaseModule],
+  imports: [PasswordResetDatabaseModule, UserDatabaseModule],
   controllers: [PasswordResetController],
   providers: [
     RequestPasswordResetUseCase,
