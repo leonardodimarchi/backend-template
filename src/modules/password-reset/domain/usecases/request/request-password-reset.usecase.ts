@@ -52,7 +52,7 @@ export class RequestPasswordResetUseCase
     }
 
     await this.mailService.send({
-      to: email,
+      to: [email],
       subject: 'Password Reset',
       bodyHtml: `
         <h1>Here is your password reset code</h1>

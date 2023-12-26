@@ -5,9 +5,16 @@ import { ValidatePasswordResetUseCase } from './domain/usecases/validate/validat
 import { PasswordResetDatabaseModule } from './infra/database/password-reset-database.module';
 import { PasswordResetController } from './presenter/controllers/password-reset.controller';
 import { UserDatabaseModule } from '@modules/user/infra/database/user-database.module';
+import { MailModule } from '@shared/infra/services/mail/mail.module';
+import { UserServiceModule } from '@modules/user/infra/services/user-services.module';
 
 @Module({
-  imports: [PasswordResetDatabaseModule, UserDatabaseModule],
+  imports: [
+    PasswordResetDatabaseModule,
+    UserDatabaseModule,
+    UserServiceModule,
+    MailModule,
+  ],
   controllers: [PasswordResetController],
   providers: [
     RequestPasswordResetUseCase,

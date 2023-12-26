@@ -1,7 +1,9 @@
 export interface SendMailOptions {
-  to: string;
+  to: string[];
   subject: string;
   bodyHtml: string;
+  cc?: string[];
+  bcc?: string[];
 }
 
 export abstract class MailService {

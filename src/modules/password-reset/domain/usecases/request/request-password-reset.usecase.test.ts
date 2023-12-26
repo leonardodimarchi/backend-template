@@ -90,7 +90,7 @@ describe('RequestPasswordResetUseCase', () => {
     expect(mailService.send).toHaveBeenCalledTimes(1);
     expect(mailService.send).toHaveBeenCalledWith(
       expect.objectContaining<Partial<SendMailOptions>>({
-        to: email,
+        to: [email],
         bodyHtml: expect.stringContaining(repository.items[0].code),
       }),
     );

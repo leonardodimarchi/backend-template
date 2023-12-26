@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { config as initDotEnv } from 'dotenv';
-import { ValidatorSpec, cleanEnv, port, str } from 'envalid';
+import { ValidatorSpec, cleanEnv, email, port, str } from 'envalid';
 import { EnvVariableKeys, EnvVariables } from '../interfaces/env-variables';
 import { EnvService } from '../interfaces/env.service';
 
@@ -25,6 +25,8 @@ export class DotEnvService implements EnvService {
     [EnvVariableKeys.DB_DATABASE]: str(),
     [EnvVariableKeys.JWT_SECRET]: str(),
     [EnvVariableKeys.JWT_EXPIRES_IN]: str(),
+    [EnvVariableKeys.MAIL_FROM]: email(),
+    [EnvVariableKeys.AWS_REGION]: str(),
   };
 
   private readonly env: EnvVariables;

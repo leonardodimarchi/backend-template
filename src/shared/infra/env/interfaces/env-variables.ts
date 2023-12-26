@@ -6,6 +6,8 @@ export enum EnvVariableKeys {
   DB_DATABASE = 'DB_DATABASE',
   JWT_SECRET = 'JWT_SECRET',
   JWT_EXPIRES_IN = 'JWT_EXPIRES_IN',
+  MAIL_FROM = 'MAIL_FROM',
+  AWS_REGION = 'AWS_REGION',
 }
 
 export type EnvVariables = {
@@ -16,4 +18,6 @@ export type EnvVariables = {
   [EnvVariableKeys.DB_DATABASE]: string;
   [EnvVariableKeys.JWT_SECRET]: string;
   [EnvVariableKeys.JWT_EXPIRES_IN]: string;
+  [EnvVariableKeys.MAIL_FROM]: string;
+  [EnvVariableKeys.AWS_REGION]: string;
 };

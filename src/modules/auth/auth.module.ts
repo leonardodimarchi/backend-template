@@ -3,7 +3,6 @@ import { PasswordEncryptionService } from '@modules/user/domain/services/passwor
 import { UserModule } from '@modules/user/user.module';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
-import { EnvModule } from '@shared/infra/env/env.module';
 import { EnvVariableKeys } from '@shared/infra/env/interfaces/env-variables';
 import { EnvService } from '@shared/infra/env/interfaces/env.service';
 import { LoginUseCase } from './domain/usecases/login.usecase';
@@ -14,9 +13,7 @@ import { AuthController } from './presenter/controllers/auth.controller';
 @Module({
   imports: [
     UserModule,
-    EnvModule,
     JwtModule.registerAsync({
-      imports: [EnvModule],
       inject: [EnvService],
       useFactory: (env: EnvService) => {
         return {
