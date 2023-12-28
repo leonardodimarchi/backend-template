@@ -35,7 +35,7 @@ This is where i'm going to place my ideas and things that i want to do or use in
 - [ ] Serverless adapter example
 - [ ] Implement refresh token
 - [x] Add user reset password module
-- [ ] Add a mail service provider
+- [x] Add a mail service provider
 - [x] Add templates to create new resources modules
 - [ ] Ignore repositories and DTOs when running a test coverage
 - [x] Add some module to interact with user (such as course or quizzes)
