@@ -4,11 +4,14 @@ import { ValidatePasswordResetUseCase } from '@modules/password-reset/domain/use
 import { UserNotFoundError } from '@modules/user/domain/errors/user-not-found.error';
 import {
   Controller,
+  Get,
   InternalServerErrorException,
   Param,
   Post,
 } from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { PasswordResetCodeValidationViewModel } from '../models/view-models/password-reset-code-validation.view-model';
+import { PasswordResetNotFoundError } from '@modules/password-reset/domain/errors/password-reset-not-found.error';
 
 @ApiTags('Password Resets')
 @Controller('password-resets')
@@ -33,6 +36,29 @@ export class PasswordResetController {
 
     if (result.value instanceof UserNotFoundError) {
       return;
+    }
+
+    throw new InternalServerErrorException();
+  }
+
+  @ApiOperation({ summary: 'Validates a password reset code' })
+  @ApiHeader({ name: 'Accept-Language', example: 'en', required: false })
+  @Get('validate/:code')
+  public async validateCode(
+    @Param('code') code: string,
+  ): Promise<PasswordResetCodeValidationViewModel> {
+    const result = await this.validatePasswordResetUseCase.exec({
+      code,
+    });
+
+    if (result.isRight()) {
+      return { isValid: result.value.matches };
+    }
+
+    if (result.value instanceof PasswordResetNotFoundError) {
+      return {
+        isValid: false,
+      };
     }
 
     throw new InternalServerErrorException();

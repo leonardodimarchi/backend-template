@@ -8,6 +8,7 @@ import { DeepMocked, createMock } from 'test/utils/create-mock';
 import { MockPasswordReset } from 'test/factories/password-reset-mock';
 import { UserNotFoundError } from '@modules/user/domain/errors/user-not-found.error';
 import { InternalServerErrorException } from '@nestjs/common';
+import { PasswordResetNotFoundError } from '@modules/password-reset/domain/errors/password-reset-not-found.error';
 
 describe('PasswordResetController', () => {
   let controller: PasswordResetController;
@@ -53,6 +54,41 @@ describe('PasswordResetController', () => {
       requestPasswordResetUseCase.exec.mockResolvedValueOnce(left(new Error()));
 
       const call = async () => await controller.request(faker.internet.email());
+
+      expect(call).rejects.toThrow(InternalServerErrorException);
+    });
+  });
+
+  describe('validateCode', () => {
+    it('should return that the code is valid', async () => {
+      validatePasswordResetUseCase.exec.mockResolvedValueOnce(
+        right({
+          matches: true,
+        }),
+      );
+
+      const result = await controller.validateCode('A'.repeat(8));
+
+      expect(result.isValid).toBeTruthy();
+    });
+
+    it('should return that the code is invalid if it was not found', async () => {
+      validatePasswordResetUseCase.exec.mockResolvedValueOnce(
+        left(new PasswordResetNotFoundError()),
+      );
+
+      const result = await controller.validateCode('A'.repeat(8));
+
+      expect(result.isValid).toBeFalsy();
+    });
+
+    it('should throw an internal server exception when receiving an unknown error', async () => {
+      validatePasswordResetUseCase.exec.mockResolvedValueOnce(
+        left(new Error()),
+      );
+
+      const call = async () => await controller.validateCode('A'.repeat(8));
+
       expect(call).rejects.toThrow(InternalServerErrorException);
     });
   });
