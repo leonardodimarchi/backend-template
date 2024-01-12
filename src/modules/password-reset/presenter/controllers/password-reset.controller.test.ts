@@ -1,14 +1,20 @@
-import { RequestPasswordResetUseCase } from '@modules/password-reset/domain/usecases/request/request-password-reset.usecase';
-import { PasswordResetController } from './password-reset.controller';
 import { faker } from '@faker-js/faker';
-import { ExecutePasswordResetUseCase } from '@modules/password-reset/domain/usecases/execute/execute-password-reset.usecase';
-import { ValidatePasswordResetUseCase } from '@modules/password-reset/domain/usecases/validate/validate-password-reset.usecase';
-import { right, left } from '@shared/helpers/either';
-import { DeepMocked, createMock } from 'test/utils/create-mock';
-import { MockPasswordReset } from 'test/factories/password-reset-mock';
-import { UserNotFoundError } from '@modules/user/domain/errors/user-not-found.error';
-import { InternalServerErrorException } from '@nestjs/common';
+import { IncorrectOldPasswordError } from '@modules/password-reset/domain/errors/incorrect-old-password.error';
 import { PasswordResetNotFoundError } from '@modules/password-reset/domain/errors/password-reset-not-found.error';
+import { ExecutePasswordResetUseCase } from '@modules/password-reset/domain/usecases/execute/execute-password-reset.usecase';
+import { RequestPasswordResetUseCase } from '@modules/password-reset/domain/usecases/request/request-password-reset.usecase';
+import { ValidatePasswordResetUseCase } from '@modules/password-reset/domain/usecases/validate/validate-password-reset.usecase';
+import { UserNotFoundError } from '@modules/user/domain/errors/user-not-found.error';
+import {
+  BadRequestException,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
+import { left, right } from '@shared/helpers/either';
+import { MockPasswordReset } from 'test/factories/password-reset-mock';
+import { createI18nMock } from 'test/utils/create-i18n-mock';
+import { DeepMocked, createMock } from 'test/utils/create-mock';
+import { PasswordResetController } from './password-reset.controller';
 
 describe('PasswordResetController', () => {
   let controller: PasswordResetController;
@@ -88,6 +94,93 @@ describe('PasswordResetController', () => {
       );
 
       const call = async () => await controller.validateCode('A'.repeat(8));
+
+      expect(call).rejects.toThrow(InternalServerErrorException);
+    });
+  });
+
+  describe('execute', () => {
+    it('should return nothing when sucessful', async () => {
+      executePasswordResetUseCase.exec.mockResolvedValueOnce(right({}));
+
+      const result = await controller.execute(
+        'A'.repeat(8),
+        {
+          oldPassword: '',
+          newPassword: '',
+        },
+        createI18nMock(),
+      );
+
+      expect(result).toBeUndefined();
+    });
+
+    it('should throw a not found exception if the password reset was not found', async () => {
+      executePasswordResetUseCase.exec.mockResolvedValueOnce(
+        left(new PasswordResetNotFoundError()),
+      );
+
+      const call = async () =>
+        await controller.execute(
+          'A'.repeat(8),
+          {
+            oldPassword: '',
+            newPassword: '',
+          },
+          createI18nMock(),
+        );
+
+      expect(call).rejects.toThrow(NotFoundException);
+    });
+
+    it('should throw a not found exception if the user was not found', async () => {
+      executePasswordResetUseCase.exec.mockResolvedValueOnce(
+        left(new UserNotFoundError()),
+      );
+
+      const call = async () =>
+        await controller.execute(
+          'A'.repeat(8),
+          {
+            oldPassword: '',
+            newPassword: '',
+          },
+          createI18nMock(),
+        );
+
+      expect(call).rejects.toThrow(NotFoundException);
+    });
+
+    it('should throw a bad request exception if the old password is incorrect', async () => {
+      executePasswordResetUseCase.exec.mockResolvedValueOnce(
+        left(new IncorrectOldPasswordError()),
+      );
+
+      const call = async () =>
+        await controller.execute(
+          'A'.repeat(8),
+          {
+            oldPassword: '',
+            newPassword: '',
+          },
+          createI18nMock(),
+        );
+
+      expect(call).rejects.toThrow(BadRequestException);
+    });
+
+    it('should throw an internal server exception when receiving an unknown error', async () => {
+      executePasswordResetUseCase.exec.mockResolvedValueOnce(left(new Error()));
+
+      const call = async () =>
+        await controller.execute(
+          'A'.repeat(8),
+          {
+            oldPassword: '',
+            newPassword: '',
+          },
+          createI18nMock(),
+        );
 
       expect(call).rejects.toThrow(InternalServerErrorException);
     });

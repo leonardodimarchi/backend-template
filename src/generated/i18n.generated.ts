@@ -39,6 +39,21 @@ export type I18nTranslations = {
       'student-already-enrolled': string;
     };
   };
+  'password-reset': {
+    validations: {
+      OLD_PASSWORD_IS_DEFINED: string;
+      OLD_PASSWORD_IS_STRING: string;
+      OLD_PASSWORD_IS_NOT_EMPTY: string;
+      NEW_PASSWORD_IS_DEFINED: string;
+      NEW_PASSWORD_IS_STRING: string;
+      NEW_PASSWORD_IS_NOT_EMPTY: string;
+    };
+    errors: {
+      'password-reset-not-found': string;
+      'incorrect-old-password': string;
+      'user-not-found': string;
+    };
+  };
   user: {
     validations: {
       EMAIL_IS_EMAIL: string;

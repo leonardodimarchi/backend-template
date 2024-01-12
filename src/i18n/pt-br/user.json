@@ -6,7 +6,7 @@
     "NAME_IS_NOT_EMPTY": "O nome de usuário não pode estar vazio.",
     "PASSWORD_IS_DEFINED": "A senha do usuário deve ser definido.",
     "PASSWORD_IS_STRING": "A senha do usuário deve ser um texto válido.",
-    "PASSWORD_IS_NOT_EMPTY": "A senha do usuário não pode estar vazio."
+    "PASSWORD_IS_NOT_EMPTY": "A senha do usuário não pode estar vazia."
   },
   "errors": {
     "duplicated-email": "O e-mail enviado já existe.",

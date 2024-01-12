@@ -1,12 +1,12 @@
+import { UserNotFoundError } from '@modules/user/domain/errors/user-not-found.error';
 import { UserRepository } from '@modules/user/domain/repositories/user.repository';
 import { PasswordEncryptionService } from '@modules/user/domain/services/password-encryption.service';
 import { Injectable } from '@nestjs/common';
+import { UseCase } from '@shared/domain/usecases/usecase';
 import { Either, left, right } from '@shared/helpers/either';
 import { IncorrectOldPasswordError } from '../../errors/incorrect-old-password.error';
 import { PasswordResetNotFoundError } from '../../errors/password-reset-not-found.error';
 import { PasswordResetRepository } from '../../repositories/password-reset.repository';
-import { UserNotFoundError } from '@modules/user/domain/errors/user-not-found.error';
-import { UseCase } from '@shared/domain/usecases/usecase';
 
 export interface ExecutePasswordResetUseCaseInput {
   code: string;
